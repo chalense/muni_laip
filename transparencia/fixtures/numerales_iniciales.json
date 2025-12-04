@@ -1,0 +1,350 @@
+[
+  {
+    "model": "transparencia.numeral",
+    "pk": 1,
+    "fields": {
+      "codigo": 1,
+      "titulo_corto": "Estructura orgánica",
+      "descripcion": "Estructura orgánica y funciones de cada una de las dependencias y departamentos, incluyendo su marco normativo.",
+      "slug": "numeral-1",
+      "activo": true,
+      "orden": 1
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 2,
+    "fields": {
+      "codigo": 2,
+      "titulo_corto": "Dirección y teléfonos",
+      "descripcion": "Dirección y teléfonos de la entidad y de todas las dependencias que la conforman.",
+      "slug": "numeral-2",
+      "activo": true,
+      "orden": 2
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 3,
+    "fields": {
+      "codigo": 3,
+      "titulo_corto": "Directorio de empleados",
+      "descripcion": "Directorio de empleados y servidores públicos, incluyendo números de teléfono y direcciones de correo electrónico oficiales no privados; quedan exentos de esta obligación los sujetos obligados cuando se ponga en riesgo el sistema nacional de seguridad, la investigación criminal e inteligencia del Estado.",
+      "slug": "numeral-3",
+      "activo": true,
+      "orden": 3
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 4,
+    "fields": {
+      "codigo": 4,
+      "titulo_corto": "Remuneraciones",
+      "descripcion": "Número y nombre de funcionarios, servidores públicos, empleados y asesores que laboran en el sujeto obligado y todas sus dependencias, incluyendo salarios que correspondan a cada cargo, honorarios, dietas, bonos, viáticos o cualquier otra remuneración económica que perciban por cualquier concepto. Quedan excentos de obligación los sujetos obligados cuando se pong en riesgo el sistema nacional de seguridad, la investigación criminal e inteligencia del Estado.",
+      "slug": "numeral-4",
+      "activo": true,
+      "orden": 4
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 5,
+    "fields": {
+      "codigo": 5,
+      "titulo_corto": "Misión y objetivos",
+      "descripcion": "Misión y objetivos de la institución, su plan operativo anual y los resultados obtenidos en el cumplimiento de los mismos.",
+      "slug": "numeral-5",
+      "activo": true,
+      "orden": 5
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 6,
+    "fields": {
+      "codigo": 6,
+      "titulo_corto": "Manuales",
+      "descripcion": "Manuales de procedimientos, tanto administrativos como operativos.",
+      "slug": "numeral-6",
+      "activo": true,
+      "orden": 6
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 7,
+    "fields": {
+      "codigo": 7,
+      "titulo_corto": "Presupuesto",
+      "descripcion": "La información sobre el presupuesto de ingresos y egresos asignado a cada ejercicio fiscal; los programas cuya elaboración y/o ejecución se encuentren a su cargo y todas las modificaciones que se realicen al mismo, incluyendo transferencias internas y externas.",
+      "slug": "numeral-7",
+      "activo": true,
+      "orden": 7
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 8,
+    "fields": {
+      "codigo": 8,
+      "titulo_corto": "Ejecución presupuestaria",
+      "descripcion": "Los informes mensuales sobre ejecución presupuestaria de todos los renglones y de todas las unidades, tanto operativas como administrativas de la entidad.",
+      "slug": "numeral-8",
+      "activo": true,
+      "orden": 8
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 9,
+    "fields": {
+      "codigo": 9,
+      "titulo_corto": "Depósitos",
+      "descripcion": "La información detallada sobre los depósitos constituidos con fondos públicos provenientes de los ingresos ordinarios, extraordinarios, impuestos, fondos privativos, empréstitos y donaciones.",
+      "slug": "numeral-9",
+      "activo": true,
+      "orden": 9
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 10,
+    "fields": {
+      "codigo": 10,
+      "titulo_corto": "Cotizaciones y Licitaciones",
+      "descripcion": "La información relacionda con los procesos de cotización y licitación para la adquisición de bienes que son utilizados para los programas de educación, salud, seguridad, desarrollo rural y todos aquellos que tienen dentro de sus características la entrega de dichos bienes a beneficiarios directos o indirectos, indicando las cantidades, precios initarios, los montos, los renglones presupuestarios correspondientes, las características de los proveedores, los detalles de los procesos de adjudicación y el contenido de los contratos.",
+      "slug": "numeral-10",
+      "activo": true,
+      "orden": 10
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 11,
+    "fields": {
+      "codigo": 11,
+      "titulo_corto": "Contratos bienes y servicios",
+      "descripcion": "La información sobre contrataciones de todos los bienes y servicios que son utlizados por los sujetos obligados, identificando los montos, precios unitarios, costos, los renglones presupuestarios correspondientes, las caracterísiticas de los proveedores, los detalles de los procesos de adjudicación y el contenido de los contratos.",
+      "slug": "numeral-11",
+      "activo": true,
+      "orden": 11
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 12,
+    "fields": {
+      "codigo": 12,
+      "titulo_corto": "Viajes",
+      "descripcion": "Listado de viajes nacionales e internacionales autorizados por los sujetos obligados y que son financiados con fondos públicos, ya sea para funcionarios públicos o para cualquier otra persona, incluyendo objetivos de los viajes, personal autorizado a viajar, destino y costos, tanto de boletos aéreos, como de viáticos.",
+      "slug": "numeral-12",
+      "activo": true,
+      "orden": 12
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 13,
+    "fields": {
+      "codigo": 13,
+      "titulo_corto": "Inventario",
+      "descripcion": "La información relacionada al inventario de bienes muebles e inmuebles con que cuenta cada uno de los sujetos obligados por la presente ley para el cumplimiento de sus atribuciones.",
+      "slug": "numeral-13",
+      "activo": true,
+      "orden": 13
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 14,
+    "fields": {
+      "codigo": 14,
+      "titulo_corto": "Contratos de mantenimiento",
+      "descripcion": "Infomración sobre los contratos de mantenimiento de equipo, vehículos, inmuebles, plantas e instalaciones de todos los sujetos obligados, incluyendo monto y plazo del contrato e información del proveedor.",
+      "slug": "numeral-14",
+      "activo": true,
+      "orden": 14
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 15,
+    "fields": {
+      "codigo": 15,
+      "titulo_corto": "Subsidios",
+      "descripcion": "Los montos asignados, los criterios de acceso y los padrones de beneficiarios de los programas de subsidios, becas o transferencias otorgados con fondos públicos.",
+      "slug": "numeral-15",
+      "activo": true,
+      "orden": 15
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 16,
+    "fields": {
+      "codigo": 16,
+      "titulo_corto": "Usufructo",
+      "descripcion": "La información relacionada a los contratos, licencias o concesiones para el usufructo o explotación de bienes del Estado.",
+      "slug": "numeral-16",
+      "activo": true,
+      "orden": 16
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 17,
+    "fields": {
+      "codigo": 17,
+      "titulo_corto": "Empresas precalificadas",
+      "descripcion": "Los listados de las empresas precalificadas para la ejecución de obras públicas, de venta de bienes y de prestación de servicios de cualquier naturaleza,  incluyendo la información relacionada a la razón social, capital autorizado y al información que corresponda al renglón para el que fueron precalificdas.",
+      "slug": "numeral-17",
+      "activo": true,
+      "orden": 17
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 18,
+    "fields": {
+      "codigo": 18,
+      "titulo_corto": "Listado de obras",
+      "descripcion": "El listado de las obras en ejecución o ejecutadas total o parcialmente con fondos públicos, o con recursos provenientes de préstamos otorgados a cualquiera de las entidades del Estado, indicando la ubicación exacta, el costo total de la obra, la fuente de financiamiento, el tiempo de ejecución, beneficiarios, empresa o entidad ejecutora, nombre del funcionario responsable de la obra, contenido y especificaciones del contrato correspondiente.",
+      "slug": "numeral-18",
+      "activo": true,
+      "orden": 18
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 19,
+    "fields": {
+      "codigo": 19,
+      "titulo_corto": "Contratos de arrendamiento",
+      "descripcion": "Los contratos de arrendamiento de inmuebles, equipo, maquinaria o cualquier otro bien o servicio, especificando las características de los mismos, motivos del arrendamiento, datos generales del arrendatario, monto y plazo de los contratos.",
+      "slug": "numeral-19",
+      "activo": true,
+      "orden": 19
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 20,
+    "fields": {
+      "codigo": 20,
+      "titulo_corto": "Contrataciones",
+      "descripcion": "Información sobre todas las contrataciones que se realicen a través de los procesos de cotización y licitación y sus contratos respectivos, identificando el número de operación correspondiente a los sistemas electrónicos de registro de contrataciones de bienes o servicios, fecha de adjudicación, nombre del proveedor, monto adjudicado, plazo del contrato y fecha de aprobación del contrato respectivo.",
+      "slug": "numeral-20",
+      "activo": true,
+      "orden": 20
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 21,
+    "fields": {
+      "codigo": 21,
+      "titulo_corto": "Fideicomisos",
+      "descripcion": "Destino total del ejercicio de los recursos de los fideicomisos constituidos con fondos públicos, incluyendo la información relacionada a las cotizaciones o licitaciones realizadas para la ejecución de dichos recursos y gastos administrativos y operativos del fideicomiso.",
+      "slug": "numeral-21",
+      "activo": true,
+      "orden": 21
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 22,
+    "fields": {
+      "codigo": 22,
+      "titulo_corto": "Compras Directas",
+      "descripcion": "El listado de las compras directas realizadas por las dependencias de los sujetos obligados.",
+      "slug": "numeral-22",
+      "activo": true,
+      "orden": 22
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 23,
+    "fields": {
+      "codigo": 23,
+      "titulo_corto": "Auditorías",
+      "descripcion": "Los informes finales de las auditorias gubernamentales o privadas practicadas a los sujetos obligados, conforme a los períodos de revisión correspondientes.",
+      "slug": "numeral-23",
+      "activo": true,
+      "orden": 23
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 24,
+    "fields": {
+      "codigo": 24,
+      "titulo_corto": "Entidades Internacionales",
+      "descripcion": "En caso de las entidades públicas o privadas de carácter internacional, que manejen o administren fondos públicos deberán hacer pública la información obligatoria contenida en los numerales anteriores, relacionada únicamente a las compras y contrataciones que realicen con dichos fondos.",
+      "slug": "numeral-24",
+      "activo": true,
+      "orden": 24
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 25,
+    "fields": {
+      "codigo": 25,
+      "titulo_corto": "Entidades Privadas",
+      "descripcion": "En caso de las entidades no gubernamentales o de carácter privado que manejen o administren fondos públicos deben hacer pública la información obligatoria contenida en los numerales anteriores, relacionada únicamente a las compras y contrataciones que realicen con dichos fondos.",
+      "slug": "numeral-25",
+      "activo": true,
+      "orden": 25
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 26,
+    "fields": {
+      "codigo": 26,
+      "titulo_corto": "Archivo",
+      "descripcion": "Los responsables de los archivos de cada uno de los sujetos obligados deberán publicar, por lo menos una vez al año, y a través del Diario de Centro América, un informe sobre; el funcionamiento y finalidad del archivo, sus sistemas de registro y categorías de información, los procedimientos y facilidades de acceso al archivo.",
+      "slug": "numeral-26",
+      "activo": true,
+      "orden": 26
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 27,
+    "fields": {
+      "codigo": 27,
+      "titulo_corto": "Información Clasificada",
+      "descripcion": "El índice de la información debidamente clasificada de acuerdo a esta ley.",
+      "slug": "numeral-27",
+      "activo": true,
+      "orden": 27
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 28,
+    "fields": {
+      "codigo": 28,
+      "titulo_corto": "Pertenencia Sociolingüística",
+      "descripcion": "Las entidades e instituciones del Estado deberán mantener informe actualizado sobre los datos relacionados con la pertenencia sociolingüística de los usuarios de sus servicios, a efecto de adecuar la prestación de los mismos.",
+      "slug": "numeral-28",
+      "activo": true,
+      "orden": 28
+    }
+  },
+  {
+    "model": "transparencia.numeral",
+    "pk": 29,
+    "fields": {
+      "codigo": 29,
+      "titulo_corto": "Información Adicional",
+      "descripcion": "Cualquier otra información que sea de utilidad o relevancia para cumplir con los fines y objetivos de la presente ley.",
+      "slug": "numeral-29",
+      "activo": true,
+      "orden": 29
+    }
+  }
+]
