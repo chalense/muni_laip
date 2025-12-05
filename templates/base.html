@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Transparencia{% endblock %} - Municipalidad de El Chal, Petén</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Animaciones personalizadas */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        /* Estilos para scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Header / Navbar -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo y título -->
+                <div class="flex items-center space-x-4">
+                    <div class="text-blue-600">
+                        <i class="fas fa-landmark text-3xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">
+                            Transparencia Municipal
+                        </h1>
+                        <p class="text-sm text-gray-600">
+                            El Chal, Petén - Guatemala
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Menú de navegación -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{% url 'transparencia:numeral_list' %}" 
+                       class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                        <i class="fas fa-home mr-2"></i>Inicio
+                    </a>
+                    <a href="{% url 'transparencia:busqueda' %}" 
+                       class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                        <i class="fas fa-search mr-2"></i>Buscar
+                    </a>
+                    <a href="{% url 'transparencia:estadisticas' %}" 
+                       class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                        <i class="fas fa-chart-bar mr-2"></i>Estadísticas
+                    </a>
+                </div>
+                
+                <!-- Menú móvil (botón) -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Menú móvil (desplegable) -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+                <a href="{% url 'transparencia:numeral_list' %}" 
+                   class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-home mr-2"></i>Inicio
+                </a>
+                <a href="{% url 'transparencia:busqueda' %}" 
+                   class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-search mr-2"></i>Buscar
+                </a>
+                <a href="{% url 'transparencia:estadisticas' %}" 
+                   class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-chart-bar mr-2"></i>Estadísticas
+                </a>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Breadcrumb (opcional) -->
+    {% block breadcrumb %}{% endblock %}
+    
+    <!-- Contenido principal -->
+    <main class="min-h-screen">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Información -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">
+                        <i class="fas fa-landmark mr-2"></i>
+                        Municipalidad de El Chal
+                    </h3>
+                    <p class="text-gray-400 text-sm mb-2">
+                        Departamento de Petén, Guatemala
+                    </p>
+                    <p class="text-gray-400 text-sm">
+                        Sistema de Transparencia Municipal conforme al Decreto 57-2008
+                    </p>
+                </div>
+                
+                <!-- Enlaces rápidos -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Enlaces Rápidos</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>
+                            <a href="{% url 'transparencia:numeral_list' %}" 
+                               class="text-gray-400 hover:text-white transition-colors">
+                                Artículo 10 - Información Pública
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'transparencia:busqueda' %}" 
+                               class="text-gray-400 hover:text-white transition-colors">
+                                Buscador de Documentos
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'transparencia:estadisticas' %}" 
+                               class="text-gray-400 hover:text-white transition-colors">
+                                Estadísticas de Acceso
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Contacto -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Marco Legal</h3>
+                    <p class="text-gray-400 text-sm mb-2">
+                        Decreto No. 57-2008 del Congreso de la República
+                    </p>
+                    <p class="text-gray-400 text-sm">
+                        Ley de Acceso a la Información Pública
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>
+                    © {% now "Y" %} Municipalidad de El Chal, Petén. Todos los derechos reservados.
+                </p>
+                <p class="mt-2">
+                    Desarrollado con Django y Tailwind CSS
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script>
+        // Menú móvil
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        
+        // Animación al scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            elements.forEach(el => observer.observe(el));
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
