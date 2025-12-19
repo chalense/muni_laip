@@ -1,0 +1,24 @@
+{
+  "name": "muni_laip",
+  "version": "1.0.0",
+  "description": "Proyecto para desarrollar el sistema para información pública de oficio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chalense/muni_laip.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chalense/muni_laip/issues"
+  },
+  "homepage": "https://github.com/chalense/muni_laip#readme",
+  "devDependencies": {
+    "tailwindcss": "^4.1.18"
+  }
+}

@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     
     #aplicaciones
     "transparencia",
+    "tailwind",
+    "theme",
 ]
 
 MIDDLEWARE = [
@@ -136,4 +138,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Tailwind CSS
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
+]
+
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]

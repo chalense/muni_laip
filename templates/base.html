@@ -1,3 +1,5 @@
+{% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,11 +8,12 @@
     <title>{% block title %}Sistema de Transparencia{% endblock %} - Municipalidad de El Chal, Petén</title>
     
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+    {% tailwind_css %}
+
     <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    {% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/fontawesome/all.min.css' %}">
     <style>
         /* Animaciones personalizadas */
         @keyframes fadeIn {
