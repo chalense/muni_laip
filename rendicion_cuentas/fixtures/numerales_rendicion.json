@@ -1,0 +1,100 @@
+[
+  {
+    "model": "rendicion_cuentas.numeralrendicion",
+    "pk": 1,
+    "fields": {
+      "codigo": "2.1.2",
+      "titulo_corto": "Memoria de Labores",
+      "descripcion": "Memoria anual de labores de la municipalidad que incluye actividades, proyectos ejecutados, logros alcanzados y desafíos enfrentados durante el período.",
+      "slug": "rendicion-2-1-2",
+      "activo": true,
+      "orden": 212,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "rendicion_cuentas.numeralrendicion",
+    "pk": 2,
+    "fields": {
+      "codigo": "2.1.4",
+      "titulo_corto": "Informes de Resultados LAIP PDH",
+      "descripcion": "Informes de resultados presentados ante la Ley de Acceso a la Información Pública (LAIP) y la Procuraduría de los Derechos Humanos (PDH).",
+      "slug": "rendicion-2-1-4",
+      "activo": true,
+      "orden": 214,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "rendicion_cuentas.numeralrendicion",
+    "pk": 3,
+    "fields": {
+      "codigo": "2.1.5",
+      "titulo_corto": "Préstamos Externos e Internos",
+      "descripcion": "Información sobre préstamos externos e internos contratados por la municipalidad, incluyendo montos, plazos, tasas de interés y destino de los recursos.",
+      "slug": "rendicion-2-1-5",
+      "activo": true,
+      "orden": 215,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "rendicion_cuentas.numeralrendicion",
+    "pk": 4,
+    "fields": {
+      "codigo": "2.1.7",
+      "titulo_corto": "Informe Rendición de Cuentas",
+      "descripcion": "Informe oficial de rendición de cuentas que detalla el uso de recursos públicos, avances en la ejecución del presupuesto y cumplimiento de objetivos institucionales.",
+      "slug": "rendicion-2-1-7",
+      "activo": true,
+      "orden": 217,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "rendicion_cuentas.numeralrendicion",
+    "pk": 5,
+    "fields": {
+      "codigo": "2.1.11",
+      "titulo_corto": "Asesorías Técnicas y Profesionales",
+      "descripcion": "Información sobre contrataciones de asesorías técnicas y profesionales, incluyendo consultores contratados, montos pagados y resultados obtenidos.",
+      "slug": "rendicion-2-1-11",
+      "activo": true,
+      "orden": 2111,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "rendicion_cuentas.numeralrendicion",
+    "pk": 6,
+    "fields": {
+      "codigo": "2.1.12",
+      "titulo_corto": "Informe Medición de Indicadores",
+      "descripcion": "Informe de medición y evaluación de indicadores de gestión municipal, que permite dar seguimiento al desempeño institucional y cumplimiento de metas.",
+      "slug": "rendicion-2-1-12",
+      "activo": true,
+      "orden": 2112,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "rendicion_cuentas.numeralrendicion",
+    "pk": 7,
+    "fields": {
+      "codigo": "2.1.25",
+      "titulo_corto": "Gestión Presupuestaria por Resultados",
+      "descripcion": "Información sobre la implementación del sistema de Gestión Presupuestaria por Resultados (GPR), vinculando la asignación de recursos con los resultados y objetivos institucionales.",
+      "slug": "rendicion-2-1-25",
+      "activo": true,
+      "orden": 2125,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  }
+]

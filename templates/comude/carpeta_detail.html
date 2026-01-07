@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ carpeta.nombre }} - {{ carpeta.numeral.titulo_corto }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <nav class="flex items-center space-x-2 text-sm flex-wrap">
+            <a href="{% url 'comude:numeral_list' %}" class="text-blue-600 hover:text-blue-800">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+            <a href="{% url 'comude:numeral_detail' carpeta.numeral.slug %}" 
+               class="text-blue-600 hover:text-blue-800">
+                Numeral {{ carpeta.numeral.codigo }}
+            </a>
+            {% for nombre, carpeta_obj in breadcrumb %}
+                <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+                {% if forloop.last %}
+                    <span class="text-gray-700 font-medium">{{ nombre }}</span>
+                {% else %}
+                    <a href="{% url 'comude:carpeta_detail' carpeta_obj.pk %}" 
+                       class="text-blue-600 hover:text-blue-800">
+                        {{ nombre }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Header de la Carpeta -->
+<div class="bg-gradient-to-r from-green-600 to-green-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+                <i class="fas fa-folder-open text-5xl"></i>
+            </div>
+            <div class="flex-1">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">
+                    {{ carpeta.nombre }}
+                </h1>
+                <p class="text-green-100 text-lg mb-4">
+                    {{ carpeta.numeral.titulo_corto }}
+                </p>
+                {% if carpeta.descripcion %}
+                    <p class="text-green-100">
+                        {{ carpeta.descripcion }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Estadísticas -->
+        <div class="grid grid-cols-2 gap-4 mt-6">
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold">{{ total_documentos }}</div>
+                <div class="text-sm text-green-100">Documentos</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold">{{ total_subcarpetas }}</div>
+                <div class="text-sm text-green-100">Subcarpetas</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Subcarpetas -->
+    {% if subcarpetas %}
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <i class="fas fa-folder text-yellow-600 mr-3"></i>
+                Subcarpetas
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for subcarpeta in subcarpetas %}
+                    <a href="{% url 'comude:carpeta_detail' subcarpeta.pk %}" 
+                       class="block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-yellow-500 transition-all group">
+                        <div class="flex items-start justify-between mb-3">
+                            <i class="fas fa-folder text-yellow-500 text-3xl group-hover:scale-110 transition-transform"></i>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">
+                                {{ subcarpeta.total_docs }} docs
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 group-hover:text-yellow-600 mb-2">
+                            {{ subcarpeta.nombre }}
+                        </h3>
+                        {% if subcarpeta.descripcion %}
+                            <p class="text-sm text-gray-600 line-clamp-2">
+                                {{ subcarpeta.descripcion }}
+                            </p>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- Documentos -->
+    {% if documentos %}
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <i class="fas fa-file-alt text-blue-600 mr-3"></i>
+                Documentos ({{ total_documentos }})
+            </h2>
+            
+            <!-- Lista de Documentos -->
+            <div class="space-y-4">
+                {% for doc in documentos %}
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl p-6 transition-all fade-in">
+                        <div class="flex items-start gap-4">
+                            <!-- Icono del tipo de archivo -->
+                            <div class="flex-shrink-0">
+                                <div class="w-16 h-16 rounded-lg flex items-center justify-center
+                                    {% if doc.extension == 'PDF' %}bg-red-100
+                                    {% elif doc.extension == 'XLSX' or doc.extension == 'XLS' %}bg-green-100
+                                    {% elif doc.extension == 'DOCX' or doc.extension == 'DOC' %}bg-blue-100
+                                    {% else %}bg-gray-100{% endif %}">
+                                    <i class="fas fa-file-{{ doc.get_icono_extension }} text-2xl
+                                        {% if doc.extension == 'PDF' %}text-red-600
+                                        {% elif doc.extension == 'XLSX' or doc.extension == 'XLS' %}text-green-600
+                                        {% elif doc.extension == 'DOCX' or doc.extension == 'DOC' %}text-blue-600
+                                        {% else %}text-gray-600{% endif %}"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Información del documento -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h3 class="text-xl font-bold text-gray-900">
+                                        {{ doc.titulo }}
+                                        {% if doc.destacado %}
+                                            <i class="fas fa-star text-yellow-500 ml-2"></i>
+                                        {% endif %}
+                                    </h3>
+                                </div>
+                                
+                                {% if doc.descripcion %}
+                                    <p class="text-gray-600 mb-3">
+                                        {{ doc.descripcion }}
+                                    </p>
+                                {% endif %}
+                                
+                                <!-- Metadatos -->
+                                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full font-semibold
+                                        {% if doc.extension == 'PDF' %}bg-red-100 text-red-800
+                                        {% elif doc.extension == 'XLSX' or doc.extension == 'XLS' %}bg-green-100 text-green-800
+                                        {% elif doc.extension == 'DOCX' or doc.extension == 'DOC' %}bg-blue-100 text-blue-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ doc.extension }}
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-weight-hanging mr-1"></i>
+                                        {{ doc.tamanio_legible }}
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        {{ doc.fecha_publicacion|date:"d/m/Y" }}
+                                    </span>
+                                    {% if doc.descargas > 0 %}
+                                        <span>
+                                            <i class="fas fa-download mr-1"></i>
+                                            {{ doc.descargas }} descarga{{ doc.descargas|pluralize }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Botón de descarga -->
+                            <div class="flex-shrink-0">
+                                <a href="{% url 'comude:documento_download' doc.pk %}" 
+                                   class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Descargar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- Sin Contenido -->
+    {% if not subcarpetas and not documentos %}
+        <div class="bg-white rounded-lg shadow-md p-12 text-center">
+            <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Carpeta vacía
+            </h3>
+            <p class="text-gray-600 mb-6">
+                Esta carpeta aún no contiene documentos ni subcarpetas.
+            </p>
+            <a href="{% url 'comude:numeral_detail' carpeta.numeral.slug %}" 
+               class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Volver al numeral
+            </a>
+        </div>
+    {% endif %}
+    
+    <!-- Botón Volver -->
+    <div class="mt-8">
+        <a href="{% url 'comude:numeral_detail' carpeta.numeral.slug %}" 
+           class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Volver a {{ carpeta.numeral.titulo_corto }}
+        </a>
+    </div>
+</div>
+{% endblock %}

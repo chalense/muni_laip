@@ -1,0 +1,16 @@
+1. Ahora iniciemos con el módulo de Informes al Congreso. Los numerales son los siguientes:
+	A Asesorías Contratadas
+	B Jornales
+	C Beneficios Salariales
+	D Arrendamiento de Edificios
+	E Convenios con otras Entidades
+	F Aportes al Sector Privado
+	G Proyectos por Cooperación
+	H Liquidación Presupuestaria.
+
+Este módulo tiene su razón de ser por el Decreto 101-97 Art. 17 Ter.
+
+Te doy la descripción:
+ARTICULO 17 Ter. Informes en Sitios Web y Comisiones de Trabajo del Congreso de la República. Los sujetos obligados a las disposiciones de la presente Ley, con el propósito de brindar a la ciudadanía guatemalteca transparencia en la gestión pública, además de cumplir con la entrega de información y documentación con la periodicidad que establece esta Ley, deberán mostrar y actualizar por lo menos cada treinta (30) días, a través de sus sitios web de acceso libre, abierto y gratuito de datos, y por escrito a las Comisiones de Probidad, de Finanzas Públicas y Moneda y a la Extraordinaria Nacional por la Transparencia, del Congreso de la República de Guatemala, la información y documentación siguiente, sin perjuicio de lo que al respecto establece la Ley de Acceso a la Información Pública.
+
+Quiero que esa descripción, pueda estar al principio de los numerales.

@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ carpeta.nombre }} - SINACIG{% endblock %}
+
+{% block breadcrumb %}
+<div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <nav class="flex items-center space-x-2 text-sm flex-wrap">
+            <a href="{% url 'sinacig:carpeta_list' %}" class="text-indigo-600 hover:text-indigo-800">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            {% for nombre, carpeta_obj in breadcrumb %}
+                <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+                {% if forloop.last %}
+                    <span class="text-gray-700 font-medium">{{ nombre }}</span>
+                {% else %}
+                    <a href="{% url 'sinacig:carpeta_detail' carpeta_obj.pk %}" 
+                       class="text-indigo-600 hover:text-indigo-800">
+                        {{ nombre }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Header de la Carpeta -->
+<div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+                <i class="fas fa-folder-open text-5xl"></i>
+            </div>
+            <div class="flex-1">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">
+                    {{ carpeta.nombre }}
+                </h1>
+                <p class="text-indigo-100 text-lg mb-4">
+                    SINACIG - Control Interno Gubernamental
+                </p>
+                {% if carpeta.descripcion %}
+                <p class="text-indigo-100">
+                    {{ carpeta.descripcion }}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Estadísticas -->
+        <div class="grid grid-cols-3 gap-4 mt-6">
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-indigo-800">{{ total_documentos }}</div>
+                <div class="text-sm text-indigo-800">Documentos</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-indigo-800">{{ total_subcarpetas }}</div>
+                <div class="text-sm text-indigo-800">Subcarpetas</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-indigo-800">{{ total_descargas }}</div>
+                <div class="text-sm text-indigo-800">Descargas</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Contenido Principal -->
+        <div class="lg:col-span-2">
+            <!-- Subcarpetas -->
+            {% if subcarpetas %}
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                    <i class="fas fa-folder text-indigo-600 mr-3"></i>
+                    Subcarpetas
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for subcarpeta in subcarpetas %}
+                    <a href="{% url 'sinacig:carpeta_detail' subcarpeta.pk %}" 
+                       class="block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-indigo-500 transition-all group">
+                        <div class="flex items-start justify-between mb-3">
+                            <i class="fas fa-folder text-indigo-500 text-3xl group-hover:scale-110 transition-transform"></i>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-3 py-1 rounded-full">
+                                {{ subcarpeta.total_docs }} docs
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 mb-2">
+                            {{ subcarpeta.nombre }}
+                        </h3>
+                        {% if subcarpeta.descripcion %}
+                        <p class="text-sm text-gray-600 line-clamp-2">
+                            {{ subcarpeta.descripcion }}
+                        </p>
+                        {% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Documentos -->
+            {% if documentos %}
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                    <i class="fas fa-file-alt text-indigo-600 mr-3"></i>
+                    Documentos ({{ total_documentos }})
+                </h2>
+                
+                <!-- Lista de Documentos -->
+                <div class="space-y-4">
+                    {% for doc in documentos %}
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl p-6 transition-all fade-in">
+                        <div class="flex items-start gap-4">
+                            <!-- Icono del tipo de archivo -->
+                            <div class="flex-shrink-0">
+                                <div class="w-16 h-16 rounded-lg flex items-center justify-center {{ doc.get_fondo_icono }}">
+                                    <i class="fas fa-{{ doc.get_icono_extension }} text-2xl {{ doc.get_color_icono }}"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Información del documento -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h3 class="text-xl font-bold text-gray-900">
+                                        {{ doc.titulo }}
+                                        {% if doc.destacado %}
+                                        <i class="fas fa-star text-yellow-500 ml-2"></i>
+                                        {% endif %}
+                                    </h3>
+                                </div>
+                                
+                                {% if doc.descripcion %}
+                                <p class="text-gray-600 mb-3">
+                                    {{ doc.descripcion }}
+                                </p>
+                                {% endif %}
+                                
+                                <!-- Metadatos -->
+                                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                                    {% with badge=doc.get_badge_color %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full font-semibold {{ badge.bg }} {{ badge.text }}">
+                                        {{ doc.extension }}
+                                    </span>
+                                    {% endwith %}
+                                    <span>
+                                        <i class="fas fa-weight-hanging mr-1"></i>
+                                        {{ doc.tamanio_legible }}
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        {{ doc.fecha_publicacion|date:"d/m/Y" }}
+                                    </span>
+                                    {% if doc.descargas > 0 %}
+                                    <span>
+                                        <i class="fas fa-download mr-1"></i>
+                                        {{ doc.descargas }} descarga{{ doc.descargas|pluralize }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Botón de descarga -->
+                            <div class="flex-shrink-0">
+                                <a href="{% url 'sinacig:documento_download' doc.pk %}" 
+                                   class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Descargar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Sin Contenido -->
+            {% if not subcarpetas and not documentos %}
+            <div class="bg-white rounded-lg shadow-md p-12 text-center">
+                <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                    Carpeta vacía
+                </h3>
+                <p class="text-gray-600 mb-6">
+                    Esta carpeta aún no contiene documentos ni subcarpetas.
+                </p>
+                <a href="{% url 'sinacig:carpeta_list' %}" 
+                   class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver al inicio
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+            <!-- Documentos Destacados -->
+            {% if documentos_destacados %}
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-star text-yellow-500 mr-2"></i>
+                    Destacados
+                </h3>
+                <ul class="space-y-3">
+                    {% for doc in documentos_destacados %}
+                    <li>
+                        <a href="{% url 'sinacig:documento_download' doc.pk %}" 
+                           class="block p-3 border border-gray-200 rounded-lg hover:border-yellow-500 hover:bg-yellow-50 transition-all">
+                            <div class="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
+                                {{ doc.titulo }}
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span class="font-mono">{{ doc.extension }}</span>
+                                <span>{{ doc.tamanio_legible }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <!-- Documentos Recientes -->
+            {% if documentos_recientes %}
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-clock text-indigo-600 mr-2"></i>
+                    Recientes
+                </h3>
+                <ul class="space-y-3">
+                    {% for doc in documentos_recientes %}
+                    <li>
+                        <a href="{% url 'sinacig:documento_download' doc.pk %}" 
+                           class="block text-sm">
+                            <div class="font-medium text-gray-900 mb-1 hover:text-indigo-600 line-clamp-2">
+                                {{ doc.titulo }}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                {{ doc.fecha_publicacion|date:"d/m/Y" }}
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <!-- Información -->
+            <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                    <i class="fas fa-info-circle text-indigo-600 mr-2"></i>
+                    Información
+                </h3>
+                <p class="text-sm text-gray-700 mb-3">
+                    Los documentos están organizados por año y categorías para facilitar su búsqueda.
+                </p>
+                <a href="{% url 'sinacig:carpeta_list' %}" 
+                   class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

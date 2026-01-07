@@ -1,0 +1,460 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ numeral.titulo_corto }} - Numeral {{ numeral.codigo }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <nav class="flex items-center space-x-2 text-sm">
+            <a href="{% url 'informes_congreso:numeral_list' %}" class="text-purple-600 hover:text-purple-800">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+            <span class="text-gray-700">Numeral {{ numeral.codigo }}</span>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Header del Numeral -->
+<div class="bg-gradient-to-r from-purple-600 to-purple-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-start gap-4 mb-6">
+            <div class="flex-shrink-0">
+                <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl font-bold text-purple-800">
+                    {{ numeral.codigo }}
+                </div>
+            </div>
+            <div class="flex-1">
+                <h1 class="text-3xl md:text-4xl font-bold mb-3">
+                    {{ numeral.titulo_corto }}
+                </h1>
+                <p class="text-purple-100 text-lg">
+                    {{ numeral.descripcion }}
+                </p>
+            </div>
+        </div>
+        
+        <!-- Estadísticas del Numeral -->
+        <div class="grid grid-cols-3 gap-4 mt-8">
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-purple-800">{{ total_documentos }}</div>
+                <div class="text-sm text-purple-800">Documentos</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-purple-800">{{ total_carpetas }}</div>
+                <div class="text-sm text-purple-800">Carpetas</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-purple-800">{{ total_descargas }}</div>
+                <div class="text-sm text-purple-800">Descargas</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Contenido Principal -->
+        <div class="lg:col-span-2">
+            <!-- Estructura de Carpetas y Documentos -->
+            {% if estructura_carpetas %}
+                <div class="space-y-4">
+                    {% for item in estructura_carpetas %}
+                        <!-- Acordeón del Año -->
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden fade-in">
+                            <!-- Header del Acordeón (clickeable) -->
+                            <button type="button" 
+                                    class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-4 flex items-center justify-between hover:cursor-pointer hover:from-purple-700 hover:to-purple-800 transition-all focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                                    onclick="toggleAcordeon('year-{{ item.carpeta.id }}')">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-calendar-alt text-2xl"></i>
+                                    <h2 class="text-2xl font-bold">{{ item.carpeta.nombre }}</h2>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-purple-800 font-semibold">
+                                        {{ item.carpeta.total_docs }} documento{{ item.carpeta.total_docs|pluralize }}
+                                    </span>
+                                    <i class="fas fa-chevron-down text-xl transition-transform duration-300" 
+                                       id="icon-year-{{ item.carpeta.id }}"></i>
+                                </div>
+                            </button>
+                            
+                            <!-- Contenido del Acordeón (colapsable) -->
+                            <div id="year-{{ item.carpeta.id }}" 
+                                 class="acordeon-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                                <div class="acordeon-inner">
+                                    
+                                    <!-- Documentos directos del año -->
+                                    {% with documentos_año=item.carpeta.documentos.all %}
+                                    {% if documentos_año %}
+                                    <div class="bg-purple-50 border-b border-purple-100 px-6 py-4">
+                                        <h3 class="text-sm font-semibold text-purple-900 mb-3 flex items-center">
+                                            <i class="fas fa-file-alt text-purple-600 mr-2"></i>
+                                            Documentos de {{ item.carpeta.nombre }}
+                                        </h3>
+                                        <ul class="space-y-2">
+                                            {% for documento in documentos_año %}
+                                            <li class="flex items-start gap-3 text-sm bg-white p-4 rounded-lg border border-purple-200 hover:shadow-md transition-shadow">
+                                                <!-- Ícono del archivo -->
+                                                <div class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center
+                                                    {% if documento.extension == 'PDF' %}bg-red-50
+                                                    {% elif documento.extension in 'XLSX,XLS,CSV' %}bg-green-50
+                                                    {% elif documento.extension in 'DOCX,DOC' %}bg-blue-50
+                                                    {% elif documento.extension in 'PNG,JPG,JPEG,SVG,GIF,BMP' %}bg-purple-50
+                                                    {% else %}bg-gray-50{% endif %}">
+                                                    <i class="fas fa-{{ documento.get_icono_extension }} {{ documento.get_color_icono }} text-2xl"></i>
+                                                </div>
+                                                
+                                                <div class="flex-1 min-w-0">
+                                                    <a href="{% url 'informes_congreso:documento_download' documento.pk %}" 
+                                                       class="text-gray-900 hover:text-purple-600 font-semibold hover:underline block"
+                                                       title="{{ documento.titulo }}">
+                                                        {{ documento.titulo }}
+                                                    </a>
+                                                    {% if documento.descripcion %}
+                                                    <p class="text-xs text-gray-600 mt-1 line-clamp-2">{{ documento.descripcion }}</p>
+                                                    {% endif %}
+                                                    
+                                                    <div class="flex items-center gap-3 text-xs text-gray-500 mt-2">
+                                                        <span class="inline-flex items-center px-2 py-1 rounded font-semibold
+                                                            {% if documento.extension == 'PDF' %}bg-red-100 text-red-800
+                                                            {% elif documento.extension in 'XLSX,XLS,CSV' %}bg-green-100 text-green-800
+                                                            {% elif documento.extension in 'DOCX,DOC' %}bg-blue-100 text-blue-800
+                                                            {% elif documento.extension in 'PNG,JPG,JPEG,SVG,GIF,BMP' %}bg-purple-100 text-purple-800
+                                                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                                            {{ documento.extension }}
+                                                        </span>
+                                                        <span><i class="fas fa-weight-hanging mr-1"></i>{{ documento.tamanio_legible }}</span>
+                                                        <span><i class="fas fa-calendar mr-1"></i>{{ documento.fecha_publicacion|date:"d/m/Y" }}</span>
+                                                        {% if documento.descargas > 0 %}
+                                                        <span><i class="fas fa-download mr-1"></i>{{ documento.descargas }}</span>
+                                                        {% endif %}
+                                                        
+                                                        {% if documento.destacado %}
+                                                        <span class="text-yellow-600"><i class="fas fa-star"></i> Destacado</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                
+                                                <a href="{% url 'informes_congreso:documento_download' documento.pk %}" 
+                                                   class="flex-shrink-0 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                                    <i class="fas fa-download"></i>
+                                                    <span class="hidden sm:inline">Descargar</span>
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                    {% endwith %}
+                                    
+                                    <!-- Subcarpetas (Meses) -->
+                                    <div class="p-6">
+                                        {% if item.subcarpetas %}
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                            <i class="fas fa-folder-open text-purple-600 mr-2"></i>
+                                            Carpetas del año {{ item.carpeta.nombre }}
+                                        </h3>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {% for sub in item.subcarpetas %}
+                                            <div class="border border-gray-200 rounded-lg p-4 hover:border-purple-500 hover:shadow-md transition-all">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <h3 class="font-semibold text-gray-900 flex items-center">
+                                                        <i class="fas fa-folder text-purple-600 mr-2"></i>
+                                                        {{ sub.carpeta.nombre }}
+                                                    </h3>
+                                                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                                        {{ sub.documentos|length }} docs
+                                                    </span>
+                                                </div>
+                                                
+                                                <!-- Documentos del Mes -->
+                                                {% if sub.documentos %}
+                                                <ul class="space-y-2 mb-3">
+                                                    {% for doc in sub.documentos|slice:":5" %}
+                                                    <li class="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                                        <!-- Ícono mejorado -->
+                                                        <div class="flex-shrink-0 w-10 h-10 rounded flex items-center justify-center
+                                                            {% if doc.extension == 'PDF' %}bg-red-50
+                                                            {% elif doc.extension in 'XLSX,XLS,CSV' %}bg-green-50
+                                                            {% elif doc.extension in 'DOCX,DOC' %}bg-blue-50
+                                                            {% elif doc.extension in 'PNG,JPG,JPEG,SVG,GIF,BMP' %}bg-purple-50
+                                                            {% else %}bg-gray-50{% endif %}">
+                                                            <i class="fas fa-{{ doc.get_icono_extension }} {{ doc.get_color_icono }} text-lg"></i>
+                                                        </div>
+                                                        <div class="flex-1 min-w-0">
+                                                            <a href="{% url 'informes_congreso:documento_download' doc.pk %}" 
+                                                               class="text-gray-700 hover:text-purple-600 font-medium hover:underline line-clamp-1"
+                                                               title="{{ doc.titulo }}">
+                                                                {{ doc.titulo }}
+                                                            </a>
+                                                            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                                                                <span class="font-mono font-semibold">{{ doc.extension }}</span>
+                                                                <span>•</span>
+                                                                <span>{{ doc.tamanio_legible }}</span>
+                                                                {% if doc.destacado %}
+                                                                <span>•</span>
+                                                                <i class="fas fa-star text-yellow-500"></i>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    {% endfor %}
+                                                    
+                                                    {% if sub.documentos|length > 5 %}
+                                                    <li class="text-sm text-purple-600 font-medium">
+                                                        <a href="{% url 'informes_congreso:carpeta_detail' sub.carpeta.pk %}" 
+                                                           class="hover:underline">
+                                                            + Ver {{ sub.documentos|length|add:"-5" }} documento(s) más
+                                                        </a>
+                                                    </li>
+                                                    {% endif %}
+                                                </ul>
+                                                {% endif %}
+                                                
+                                                <!-- Subcarpetas adicionales -->
+                                                {% if sub.subcarpetas %}
+                                                <div class="mt-3 pt-3 border-t border-gray-200">
+                                                    <p class="text-xs text-gray-600 mb-2">
+                                                        <i class="fas fa-folder-open mr-1"></i>
+                                                        Subcarpetas:
+                                                    </p>
+                                                    {% for subsub in sub.subcarpetas %}
+                                                    <a href="{% url 'informes_congreso:carpeta_detail' subsub.carpeta.pk %}" 
+                                                       class="inline-block text-xs bg-gray-100 hover:bg-purple-100 px-2 py-1 rounded mr-2 mb-2">
+                                                        📂 {{ subsub.carpeta.nombre }}
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+                                                
+                                                {% if sub.documentos or sub.subcarpetas %}
+                                                <a href="{% url 'informes_congreso:carpeta_detail' sub.carpeta.pk %}" 
+                                                   class="inline-flex items-center text-sm text-purple-600 hover:text-purple-800 font-medium mt-2">
+                                                    Ver carpeta completa
+                                                    <i class="fas fa-arrow-right ml-2"></i>
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        {% else %}
+                                        <p class="text-gray-500 text-center py-8">
+                                            <i class="fas fa-inbox text-4xl mb-3 block text-gray-300"></i>
+                                            No hay documentos en este año
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Documentos sin carpeta (raíz) -->
+            {% if documentos_raiz %}
+            <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-file-alt text-purple-600 mr-2"></i>
+                    Documentos Generales
+                </h2>
+                <div class="space-y-3">
+                    {% for doc in documentos_raiz %}
+                    <div class="flex items-start gap-4 p-4 border border-gray-200 rounded-lg hover:border-purple-500 hover:shadow-md transition-all">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center
+                            {% if doc.extension == 'PDF' %}bg-red-50
+                            {% elif doc.extension in 'XLSX,XLS,CSV' %}bg-green-50
+                            {% elif doc.extension in 'DOCX,DOC' %}bg-blue-50
+                            {% elif doc.extension in 'PNG,JPG,JPEG,SVG,GIF,BMP' %}bg-purple-50
+                            {% else %}bg-gray-50{% endif %}">
+                            <i class="fas fa-{{ doc.get_icono_extension }} {{ doc.get_color_icono }} text-2xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <a href="{% url 'informes_congreso:documento_download' doc.pk %}" 
+                               class="text-gray-900 hover:text-purple-600 font-semibold hover:underline block">
+                                {{ doc.titulo }}
+                            </a>
+                            {% if doc.descripcion %}
+                            <p class="text-sm text-gray-600 mt-1">{{ doc.descripcion }}</p>
+                            {% endif %}
+                            
+                            <div class="flex items-center gap-3 text-xs text-gray-500 mt-2">
+                                <span class="inline-flex items-center px-2 py-1 rounded font-semibold
+                                    {% if doc.extension == 'PDF' %}bg-red-100 text-red-800
+                                    {% elif doc.extension in 'XLSX,XLS,CSV' %}bg-green-100 text-green-800
+                                    {% elif doc.extension in 'DOCX,DOC' %}bg-blue-100 text-blue-800
+                                    {% elif doc.extension in 'PNG,JPG,JPEG,SVG,GIF,BMP' %}bg-purple-100 text-purple-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ doc.extension }}
+                                </span>
+                                <span><i class="fas fa-weight-hanging mr-1"></i>{{ doc.tamanio_legible }}</span>
+                                <span><i class="fas fa-calendar mr-1"></i>{{ doc.fecha_publicacion|date:"d/m/Y" }}</span>
+                                {% if doc.descargas > 0 %}
+                                <span><i class="fas fa-download mr-1"></i>{{ doc.descargas }}</span>
+                                {% endif %}
+                                
+                                {% if doc.destacado %}
+                                <span class="text-yellow-600"><i class="fas fa-star"></i> Destacado</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{% url 'informes_congreso:documento_download' doc.pk %}" 
+                           class="flex-shrink-0 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <i class="fas fa-download mr-2"></i>
+                            Descargar
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Sin Documentos -->
+            {% if not estructura_carpetas and not documentos_raiz %}
+            <div class="bg-white rounded-lg shadow-md p-12 text-center">
+                <i class="fas fa-folder-open text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                    No hay documentos publicados
+                </h3>
+                <p class="text-gray-600">
+                    Aún no se han cargado documentos para este numeral.
+                </p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+            <!-- Documentos Destacados -->
+            {% if documentos_destacados %}
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-star text-yellow-500 mr-2"></i>
+                    Destacados
+                </h3>
+                <ul class="space-y-3">
+                    {% for doc in documentos_destacados %}
+                    <li>
+                        <a href="{% url 'informes_congreso:documento_download' doc.pk %}" 
+                           class="block p-3 border border-gray-200 rounded-lg hover:border-yellow-500 hover:bg-yellow-50 transition-all">
+                            <div class="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
+                                {{ doc.titulo }}
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span class="font-mono">{{ doc.extension }}</span>
+                                <span>{{ doc.tamanio_legible }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <!-- Documentos Recientes -->
+            {% if documentos_recientes %}
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-clock text-purple-600 mr-2"></i>
+                    Recientes
+                </h3>
+                <ul class="space-y-3">
+                    {% for doc in documentos_recientes %}
+                    <li>
+                        <a href="{% url 'informes_congreso:documento_download' doc.pk %}" 
+                           class="block text-sm">
+                            <div class="font-medium text-gray-900 mb-1 hover:text-purple-600 line-clamp-2">
+                                {{ doc.titulo }}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                {{ doc.fecha_publicacion|date:"d/m/Y" }}
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <!-- Información -->
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                    <i class="fas fa-info-circle text-purple-600 mr-2"></i>
+                    Información
+                </h3>
+                <p class="text-sm text-gray-700 mb-3">
+                    Los documentos están organizados por año y mes para facilitar su búsqueda.
+                </p>
+                <a href="{% url 'informes_congreso:numeral_list' %}" 
+                   class="inline-flex items-center text-sm text-purple-600 hover:text-purple-800 font-medium">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver a todos los numerales
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+function toggleAcordeon(id) {
+    const content = document.getElementById(id);
+    const icon = document.getElementById('icon-' + id);
+    const inner = content.querySelector('.acordeon-inner');
+    
+    if (content.classList.contains('open')) {
+        // Cerrar
+        content.style.maxHeight = '0px';
+        content.classList.remove('open');
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        // Cerrar todos los demás acordeones primero (opcional)
+        document.querySelectorAll('.acordeon-content.open').forEach(item => {
+            if (item.id !== id) {
+                item.style.maxHeight = '0px';
+                item.classList.remove('open');
+                const otherIcon = document.getElementById('icon-' + item.id);
+                if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+            }
+        });
+        
+        // Abrir
+        content.style.maxHeight = inner.scrollHeight + 'px';
+        content.classList.add('open');
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+// Abrir el primer año por defecto al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    const firstYear = document.querySelector('[id^="year-"]');
+    if (firstYear) {
+        const id = firstYear.id;
+        toggleAcordeon(id);
+    }
+});
+</script>
+
+<style>
+.acordeon-content {
+    transition: max-height 0.3s ease-in-out;
+}
+
+.acordeon-inner {
+    transition: opacity 0.2s ease-in-out;
+}
+
+.acordeon-content:not(.open) .acordeon-inner {
+    opacity: 0;
+}
+
+.acordeon-content.open .acordeon-inner {
+    opacity: 1;
+}
+</style>
+{% endblock %}
+
+{% endblock %}

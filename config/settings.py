@@ -39,7 +39,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     
     #aplicaciones
+    "home",
     "transparencia",
+    "comude",
+    "rendicion_cuentas",
+    "informes_congreso",
+    "sinacig",
+    "solicitudes",
     "tailwind",
     "theme",
 ]
@@ -144,3 +150,11 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'mail.munielchalpeten.gob.gt'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'infopublica@munielchalpeten.gob.gt'
+EMAIL_HOST_PASSWORD = 'InfoPublica2017()'
+DEFAULT_FROM_EMAIL = 'noreply@munielchalpeten.gob.gt'

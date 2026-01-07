@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ numeral.titulo_corto }} - Numeral {{ numeral.codigo }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <nav class="flex items-center space-x-2 text-sm">
+            <a href="{% url 'comude:numeral_list' %}" class="text-blue-600 hover:text-blue-800">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+            <span class="text-gray-700">Numeral {{ numeral.codigo }}</span>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Header del Numeral -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-start gap-4 mb-6">
+            <div class="flex-shrink-0">
+                <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl font-bold text-blue-500">
+                    {{ numeral.codigo }}
+                </div>
+            </div>
+            <div class="flex-1">
+                <h1 class="text-3xl md:text-4xl font-bold mb-3">
+                    {{ numeral.titulo_corto }}
+                </h1>
+                <p class="text-blue-100 text-lg">
+                    {{ numeral.descripcion }}
+                </p>
+            </div>
+        </div>
+        
+        <!-- Estadísticas del Numeral -->
+        <div class="grid grid-cols-3 gap-4 mt-8">
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-blue-500">{{ total_documentos }}</div>
+                <div class="text-sm text-blue-500">Documentos</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-blue-500">{{ total_carpetas }}</div>
+                <div class="text-sm text-blue-500">Carpetas</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-blue-500">{{ total_descargas }}</div>
+                <div class="text-sm text-blue-500">Descargas</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Contenido Principal -->
+        <div class="lg:col-span-2">
+            {% if estructura_carpetas %}
+                <!-- Estructura de Carpetas y Documentos -->
+                <div class="space-y-6">
+                    {% for item in estructura_carpetas %}
+                        <!-- Carpeta Raíz (Año) -->
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden fade-in">
+                            <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-calendar-alt text-2xl"></i>
+                                    <h2 class="text-2xl font-bold">{{ item.carpeta.nombre }}</h2>
+                                </div>
+                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">
+                                    {{ item.carpeta.total_documentos }} docs
+                                </span>
+                            </div>
+                            
+                            <!-- Subcarpetas (Meses) -->
+                            <div class="p-6">
+                                {% if item.subcarpetas %}
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {% for sub in item.subcarpetas %}
+                                            <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:shadow-md transition-all">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <h3 class="font-semibold text-gray-900 flex items-center">
+                                                        <i class="fas fa-folder text-blue-600 mr-2"></i>
+                                                        {{ sub.carpeta.nombre }}
+                                                    </h3>
+                                                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                                        {{ sub.documentos|length }} docs
+                                                    </span>
+                                                </div>
+                                                
+                                                <!-- Documentos del Mes -->
+                                                {% if sub.documentos %}
+                                                    <ul class="space-y-2 mb-3">
+                                                        {% for doc in sub.documentos|slice:":5" %}
+                                                            <li class="flex items-start gap-2 text-sm">
+                                                                <i class="fas fa-file-{{ doc.get_icono_extension }} 
+                                                                    {% if doc.extension == 'PDF' %}text-red-500
+                                                                    {% elif doc.extension == 'XLSX' or doc.extension == 'XLS' %}text-green-500
+                                                                    {% elif doc.extension == 'DOCX' or doc.extension == 'DOC' %}text-blue-500
+                                                                    {% else %}text-gray-500{% endif %}
+                                                                    mt-1"></i>
+                                                                <div class="flex-1 min-w-0">
+                                                                    <a href="{% url 'comude:documento_download' doc.pk %}" 
+                                                                       class="text-gray-700 hover:text-blue-600 font-medium hover:underline line-clamp-1"
+                                                                       title="{{ doc.titulo }}">
+                                                                        {{ doc.titulo }}
+                                                                    </a>
+                                                                    <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                                                                        <span class="font-mono">{{ doc.extension }}</span>
+                                                                        <span>•</span>
+                                                                        <span>{{ doc.tamanio_legible }}</span>
+                                                                        {% if doc.destacado %}
+                                                                        <span>•</span>
+                                                                        <i class="fas fa-star text-yellow-500"></i>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        {% endfor %}
+                                                        
+                                                        {% if sub.documentos|length > 5 %}
+                                                            <li class="text-sm text-blue-600 font-medium">
+                                                                <a href="{% url 'comude:carpeta_detail' sub.carpeta.pk %}" 
+                                                                   class="hover:underline">
+                                                                    + Ver {{ sub.documentos|length|add:"-5" }} documento(s) más
+                                                                </a>
+                                                            </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                {% endif %}
+                                                
+                                                <!-- Subcarpetas adicionales -->
+                                                {% if sub.subcarpetas %}
+                                                    <div class="mt-3 pt-3 border-t border-gray-200">
+                                                        <p class="text-xs text-gray-600 mb-2">
+                                                            <i class="fas fa-folder-open mr-1"></i>
+                                                            Subcarpetas:
+                                                        </p>
+                                                        {% for subsub in sub.subcarpetas %}
+                                                            <a href="{% url 'comude:carpeta_detail' subsub.carpeta.pk %}" 
+                                                               class="inline-block text-xs bg-gray-100 hover:bg-blue-100 px-2 py-1 rounded mr-2 mb-2">
+                                                                📂 {{ subsub.carpeta.nombre }}
+                                                            </a>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                                
+                                                {% if sub.documentos or sub.subcarpetas %}
+                                                    <a href="{% url 'comude:carpeta_detail' sub.carpeta.pk %}" 
+                                                       class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium mt-2">
+                                                        Ver carpeta completa
+                                                        <i class="fas fa-arrow-right ml-2"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="text-gray-500 text-center py-8">
+                                        <i class="fas fa-inbox text-4xl mb-3 block text-gray-300"></i>
+                                        No hay documentos en este año
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Documentos en la Raíz -->
+            {% if documentos_raiz %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden mt-6">
+                    <div class="bg-gray-100 px-6 py-4 border-b">
+                        <h2 class="text-xl font-bold text-gray-900 flex items-center">
+                            <i class="fas fa-file-alt text-gray-600 mr-2"></i>
+                            Documentos Generales
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            {% for doc in documentos_raiz %}
+                                <li class="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <i class="fas fa-file-{{ doc.get_icono_extension }} text-2xl
+                                        {% if doc.extension == 'PDF' %}text-red-500
+                                        {% elif doc.extension == 'XLSX' or doc.extension == 'XLS' %}text-green-500
+                                        {% elif doc.extension == 'DOCX' or doc.extension == 'DOC' %}text-blue-500
+                                        {% else %}text-gray-500{% endif %}
+                                        mt-1"></i>
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold text-gray-900 mb-1">{{ doc.titulo }}</h3>
+                                        {% if doc.descripcion %}
+                                            <p class="text-sm text-gray-600 mb-2">{{ doc.descripcion }}</p>
+                                        {% endif %}
+                                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                                            <span class="font-mono font-semibold">{{ doc.extension }}</span>
+                                            <span>{{ doc.tamanio_legible }}</span>
+                                            <span>{{ doc.fecha_publicacion|date:"d/m/Y" }}</span>
+                                            {% if doc.descargas > 0 %}
+                                                <span><i class="fas fa-download mr-1"></i>{{ doc.descargas }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <a href="{% url 'comude:documento_download' doc.pk %}" 
+                                       class="flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                        <i class="fas fa-download mr-2"></i>Descargar
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- Sin Documentos -->
+            {% if not estructura_carpetas and not documentos_raiz %}
+                <div class="bg-white rounded-lg shadow-md p-12 text-center">
+                    <i class="fas fa-folder-open text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                        No hay documentos publicados
+                    </h3>
+                    <p class="text-gray-600">
+                        Aún no se han cargado documentos para este numeral.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+            <!-- Documentos Destacados -->
+            {% if documentos_destacados %}
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-star text-yellow-500 mr-2"></i>
+                        Destacados
+                    </h3>
+                    <ul class="space-y-3">
+                        {% for doc in documentos_destacados %}
+                            <li>
+                                <a href="{% url 'comude:documento_download' doc.pk %}" 
+                                   class="block p-3 border border-gray-200 rounded-lg hover:border-yellow-500 hover:bg-yellow-50 transition-all">
+                                    <div class="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
+                                        {{ doc.titulo }}
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs text-gray-500">
+                                        <span class="font-mono">{{ doc.extension }}</span>
+                                        <span>{{ doc.tamanio_legible }}</span>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+            <!-- Documentos Recientes -->
+            {% if documentos_recientes %}
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-clock text-blue-600 mr-2"></i>
+                        Recientes
+                    </h3>
+                    <ul class="space-y-3">
+                        {% for doc in documentos_recientes %}
+                            <li>
+                                <a href="{% url 'comude:documento_download' doc.pk %}" 
+                                   class="block text-sm">
+                                    <div class="font-medium text-gray-900 mb-1 hover:text-blue-600 line-clamp-2">
+                                        {{ doc.titulo }}
+                                    </div>
+                                    <div class="text-xs text-gray-500">
+                                        {{ doc.fecha_publicacion|date:"d/m/Y" }}
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+            <!-- Información -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                    Información
+                </h3>
+                <p class="text-sm text-gray-700 mb-3">
+                    Los documentos están organizados por año y mes para facilitar su búsqueda.
+                </p>
+                <a href="{% url 'comude:numeral_list' %}" 
+                   class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver a todos los numerales
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

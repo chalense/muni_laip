@@ -1,3 +1,6 @@
+from django.http import JsonResponse
+from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_GET
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, Q, Prefetch
@@ -144,15 +147,18 @@ class NumeralDetailView(DetailView):
                 'documentos',
                 filter=Q(documentos__publicado=True)
             )
-        ).order_by('-orden', 'nombre')
+        ).order_by('-orden', 'nombre').prefetch_related(
+            Prefetch(
+                'documentos',
+                queryset = Documento.objects.filter(
+                    publicado=True).order_by('-destacado', '-fecha_publicacion')
+            )
+        )
         
         estructura = []
         for subcarpeta in subcarpetas:
             # Obtener documentos de esta subcarpeta
-            documentos = Documento.objects.filter(
-                carpeta=subcarpeta,
-                publicado=True
-            ).order_by('-destacado', '-fecha_publicacion')
+            documentos = subcarpeta.documentos.all() # Gracias al prefetch_related
             
             estructura.append({
                 'carpeta': subcarpeta,
@@ -270,24 +276,44 @@ class BusquedaView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        numeral = self.object
         
-        # Parámetros de búsqueda
-        context['query'] = self.request.GET.get('q', '')
-        context['numeral_filter'] = self.request.GET.get('numeral', '')
-        context['tipo_filter'] = self.request.GET.get('tipo', '')
+        # # Parámetros de búsqueda
+        # context['query'] = self.request.GET.get('q', '')
+        # context['numeral_filter'] = self.request.GET.get('numeral', '')
+        # context['tipo_filter'] = self.request.GET.get('tipo', '')
         
-        # Numerales para el filtro
-        context['numerales'] = Numeral.objects.filter(activo=True).order_by('codigo')
+        # # Numerales para el filtro
+        # context['numerales'] = Numeral.objects.filter(activo=True).order_by('codigo')
         
-        # Tipos de archivo disponibles
-        context['tipos_archivo'] = Documento.objects.filter(
-            publicado=True
-        ).values_list('extension', flat=True).distinct().order_by('extension')
+        # # Tipos de archivo disponibles
+        # context['tipos_archivo'] = Documento.objects.filter(
+        #     publicado=True
+        # ).values_list('extension', flat=True).distinct().order_by('extension')
         
-        # Total de resultados
-        context['total_resultados'] = self.get_queryset().count()
+        # # Total de resultados
+        # context['total_resultados'] = self.get_queryset().count()
         
-        return context
+        # return context
+        
+        carpeta_raiz = Carpeta.objects.filter(
+            numeral=numeral, padre__isnull=True
+        ).annotate(
+            total_docs=Count('documentos', filter=Q(documentos__publicado=True))
+        ).order_by('-orden', '-nombre').prefetch_related(
+            Prefetch('documentos',
+                queryset=Documento.objects.filter(
+                    publicado=True).order_by('-destacado', '-fecha_publicacion')
+        ))
+        
+        estructura = []
+        for carpeta in carpeta_raiz:
+            estructura.append({
+                'carpeta': carpeta,
+                'subcarpetas': self._construir_arbol(carpeta_raiz)
+            })
+        
+        context['estructura_carpetas'] = estructura
 
 
 class EstadisticasView(ListView):
@@ -339,3 +365,50 @@ class EstadisticasView(ListView):
         ).order_by('-total')
         
         return context
+    
+@staff_member_required
+@require_GET
+def get_carpetas_por_numeral(request):
+    """
+    Vista AJAX para obtener carpetas filtradas por numeral
+    Usada en el admin para filtrado dinámico
+    """
+    numeral_id = request.GET.get('numeral_id')
+    app = request.GET.get('app', 'transparencia')
+    
+    if not numeral_id:
+        return JsonResponse({'carpetas': []})
+    
+    try:
+        # Importar el modelo correcto según la app
+        if app == 'transparencia':
+            from .models import Carpeta
+            modelo_carpeta = Carpeta
+        elif app == 'comude':
+            from comude.models import CarpetaComude as modelo_carpeta
+        elif app == 'rendicion_cuentas':
+            from rendicion_cuentas.models import CarpetaRendicion as modelo_carpeta
+        elif app == 'informes_congreso':
+            from informes_congreso.models import CarpetaInformesCongreso as modelo_carpeta
+        else:
+            return JsonResponse({'carpetas': []})
+        
+        # Obtener carpetas del numeral
+        carpetas = modelo_carpeta.objects.filter(
+            numeral_id=numeral_id
+        ).select_related('padre', 'numeral').order_by('-orden', '-nombre')
+        
+        # Construir lista con rutas completas
+        carpetas_data = []
+        for carpeta in carpetas:
+            carpetas_data.append({
+                'id': carpeta.id,
+                'nombre': carpeta.nombre,
+                'ruta_completa': carpeta.get_ruta_completa(),
+                'nivel': carpeta.nivel()
+            })
+        
+        return JsonResponse({'carpetas': carpetas_data})
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)

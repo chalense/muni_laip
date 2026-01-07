@@ -203,7 +203,7 @@ class CarpetaAdmin(admin.ModelAdmin):
         indent = '&nbsp;&nbsp;&nbsp;&nbsp;' * nivel
         
         if nivel == 0:
-            estilo = 'font-weight: bold; color: #1F2937; font-size: 14px;'
+            estilo = 'font-weight: bold; color: #fff; font-size: 14px;'
         elif nivel == 1:
             estilo = 'font-weight: 600; color: #374151;'
         else:
@@ -282,6 +282,19 @@ class CarpetaAdmin(admin.ModelAdmin):
         '''
         return mark_safe(html)
     info_jerarquia.short_description = 'Información de Jerarquía'
+    
+    def get_search_results(self, request, queryset, search_term):
+        """
+        Mejora la búsqueda de carpetas para el autocomplete
+        """
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        
+        # Si viene un parámetro de numeral en la URL, filtrar por ese numeral
+        numeral_id = request.GET.get('numeral_id')
+        if numeral_id:
+            queryset = queryset.filter(numeral_id=numeral_id)
+        
+        return queryset, use_distinct
 
 
 @admin.register(Documento)
@@ -297,7 +310,8 @@ class DocumentoAdmin(admin.ModelAdmin):
         'tamanio_badge',
         'descargas_badge',
         'estado_badge',
-        'fecha_publicacion'
+        'fecha_publicacion',
+        'acciones_rapidas'
     ]
     list_filter = [
         'publicado',
@@ -307,7 +321,10 @@ class DocumentoAdmin(admin.ModelAdmin):
         'fecha_publicacion'
     ]
     search_fields = ['titulo', 'descripcion', 'numeral__titulo_corto']
-    autocomplete_fields = ['numeral', 'carpeta']
+    
+    list_editable = []
+    
+    autocomplete_fields = ['numeral']
     readonly_fields = [
         'tamanio_bytes',
         'extension',
@@ -341,11 +358,110 @@ class DocumentoAdmin(admin.ModelAdmin):
         }),
     )
     
-    list_per_page = 50
-    date_hierarchy = 'fecha_publicacion'
-    ordering = ['-fecha_publicacion']
+    def acciones_rapidas(self, obj):
+        """
+        Muestra botones de acción rápida para cada documento
+        """
+        editar_url = reverse('admin:transparencia_documento_change', args=[obj.pk])
+        eliminar_url = reverse('admin:transparencia_documento_delete', args=[obj.pk])
+        ver_url = obj.archivo.url if obj.archivo else '#'
+        
+        html = f'''
+        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+            <a href="{editar_url}" 
+               style="display: inline-flex; align-items: center; padding: 4px 8px; 
+                      background: #3B82F6; color: white; border-radius: 4px; 
+                      text-decoration: none; font-size: 11px; font-weight: 600;"
+               title="Editar documento">
+                <svg style="width: 12px; height: 12px; margin-right: 4px;" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                </svg>
+                Editar
+            </a>
+            <a href="{ver_url}" 
+               target="_blank"
+               style="display: inline-flex; align-items: center; padding: 4px 8px; 
+                      background: #10B981; color: white; border-radius: 4px; 
+                      text-decoration: none; font-size: 11px; font-weight: 600;"
+               title="Ver/Descargar archivo">
+                <svg style="width: 12px; height: 12px; margin-right: 4px;" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                </svg>
+                Ver
+            </a>
+            <a href="{eliminar_url}" 
+               style="display: inline-flex; align-items: center; padding: 4px 8px; 
+                      background: #EF4444; color: white; border-radius: 4px; 
+                      text-decoration: none; font-size: 11px; font-weight: 600;"
+               title="Eliminar documento"
+               onclick="return confirm('¿Estás seguro de eliminar este documento?');">
+                <svg style="width: 12px; height: 12px; margin-right: 4px;" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                Eliminar
+            </a>
+        </div>
+        '''
+        return mark_safe(html)
+    acciones_rapidas.short_description = 'Acciones'
     
-    actions = ['publicar_documentos', 'despublicar_documentos', 'marcar_destacados']
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Filtra las carpetas según el numeral seleccionado
+        """
+        if db_field.name == "carpeta":
+            # Si estamos editando un documento existente
+            obj_id = request.resolver_match.kwargs.get('object_id')
+            
+            if obj_id:
+                # Documento existente - filtrar por su numeral
+                try:
+                    documento = Documento.objects.get(pk=obj_id)
+                    kwargs["queryset"] = Carpeta.objects.filter(
+                        numeral=documento.numeral
+                    ).select_related('padre')
+                except Documento.DoesNotExist:
+                    kwargs["queryset"] = Carpeta.objects.none()
+            else:
+                # Nuevo documento - intentar obtener numeral de POST
+                numeral_id = request.POST.get('numeral') or request.GET.get('numeral')
+                
+                if numeral_id:
+                    kwargs["queryset"] = Carpeta.objects.filter(
+                        numeral_id=numeral_id
+                    ).select_related('padre')
+                else:
+                    # Si no hay numeral, no mostrar carpetas
+                    kwargs["queryset"] = Carpeta.objects.none()
+            
+            # Personalizar cómo se muestran las carpetas
+            def label_from_instance(obj):
+                """Muestra la ruta completa de la carpeta"""
+                return f"{obj.get_ruta_completa()}"
+            
+            form_field = super().formfield_for_foreignkey(db_field, request, **kwargs)
+            form_field.label_from_instance = label_from_instance
+            return form_field
+        
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    
+    # Método para personalizar el formulario
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Personaliza el formulario para mejorar la UX
+        """
+        form = super().get_form(request, obj, **kwargs)
+        
+        # Agregar help text personalizado para carpeta
+        if 'carpeta' in form.base_fields:
+            if obj and obj.numeral:
+                form.base_fields['carpeta'].help_text = f'Carpetas del Numeral {obj.numeral.codigo}'
+            else:
+                form.base_fields['carpeta'].help_text = 'Primero selecciona un Numeral y guarda para poder elegir carpeta'
+                form.base_fields['carpeta'].required = False
+        
+        return form
     
     def extension_badge(self, obj):
         """Badge con el tipo de archivo"""

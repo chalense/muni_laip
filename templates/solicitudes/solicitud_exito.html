@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Solicitud Enviada - Éxito{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+    <div class="max-w-2xl w-full">
+        <!-- Icono de éxito -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-green-100 rounded-full mb-4">
+                <i class="fas fa-check-circle text-green-600 text-5xl"></i>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                ¡Solicitud Enviada Exitosamente!
+            </h1>
+            <p class="text-lg text-gray-600">
+                Su solicitud de información ha sido recibida
+            </p>
+        </div>
+        
+        {% if solicitud %}
+        <!-- Información de la solicitud -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-file-alt mr-2"></i>
+                    Detalles de su Solicitud
+                </h2>
+            </div>
+            
+            <!-- Contenido -->
+            <div class="p-6 space-y-4">
+                <!-- Número de seguimiento (destacado) -->
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                    <p class="text-sm text-gray-600 mb-1">Número de Seguimiento:</p>
+                    <p class="text-2xl font-bold text-blue-600">{{ solicitud.numero_seguimiento }}</p>
+                    <p class="text-xs text-gray-500 mt-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Guarde este número para consultar el estado de su solicitud
+                    </p>
+                </div>
+                
+                <!-- Datos del solicitante -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div>
+                        <p class="text-sm text-gray-500">Solicitante</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.nombre_completo }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Fecha de solicitud</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.fecha_solicitud|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Correo electrónico</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.correo_electronico }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Medio de entrega</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.get_medio_entrega_display }}</p>
+                    </div>
+                </div>
+                
+                <!-- Solicitud -->
+                <div class="pt-2">
+                    <p class="text-sm text-gray-500 mb-2">Información solicitada:</p>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <p class="text-gray-700">{{ solicitud.solicitud }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Información importante -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 flex items-center">
+                <i class="fas fa-clock text-yellow-600 mr-2"></i>
+                ¿Qué sigue ahora?
+            </h3>
+            <ul class="space-y-2 text-sm text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check text-green-600 mt-1"></i>
+                    <span>Hemos enviado una copia de su solicitud a su correo electrónico</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check text-green-600 mt-1"></i>
+                    <span>Su solicitud será revisada por la Unidad de Información Pública</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check text-green-600 mt-1"></i>
+                    <span>Recibirá una respuesta en un plazo máximo de <strong>10 días hábiles</strong></span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check text-green-600 mt-1"></i>
+                    <span>Puede consultar el estado de su solicitud en cualquier momento usando su número de seguimiento</span>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+        
+        <!-- Botones de acción -->
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="{% url 'solicitudes:solicitud_consulta' %}" 
+               class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                <i class="fas fa-search mr-2"></i>
+                Consultar Estado
+            </a>
+            <a href="/" 
+               class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                <i class="fas fa-home mr-2"></i>
+                Ir al Inicio
+            </a>
+        </div>
+        
+        <!-- Contacto -->
+        <div class="mt-8 text-center text-sm text-gray-600">
+            <p>¿Tiene preguntas? Contáctenos:</p>
+            <p class="mt-2">
+                <i class="fas fa-envelope mr-1"></i>
+                <a href="mailto:infopublica@munielchalpeten.gob.gt" class="text-blue-600 hover:underline">
+                    infopublica@munielchalpeten.gob.gt
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

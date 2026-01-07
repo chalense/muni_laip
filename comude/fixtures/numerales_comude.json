@@ -1,0 +1,198 @@
+[
+  {
+    "model": "comude.numeralcomude",
+    "pk": 1,
+    "fields": {
+      "codigo": "01A.",
+      "titulo_corto": "Estructura orgánica",
+      "descripcion": "Estructura orgánica del Consejo Municipal de Desarrollo (COMUDE) incluyendo la conformación de sus miembros y representantes.",
+      "slug": "comude-01a",
+      "activo": true,
+      "orden": 1,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 2,
+    "fields": {
+      "codigo": "01B.",
+      "titulo_corto": "Funciones",
+      "descripcion": "Funciones y atribuciones del Consejo Municipal de Desarrollo según la Ley de Consejos de Desarrollo.",
+      "slug": "comude-01b",
+      "activo": true,
+      "orden": 2,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 3,
+    "fields": {
+      "codigo": "01C.",
+      "titulo_corto": "Marco normativo",
+      "descripcion": "Marco normativo que regula el funcionamiento del COMUDE, incluyendo leyes, reglamentos y acuerdos.",
+      "slug": "comude-01c",
+      "activo": true,
+      "orden": 3,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 4,
+    "fields": {
+      "codigo": "02A.",
+      "titulo_corto": "Dirección y teléfonos",
+      "descripcion": "Dirección física, correo electrónico y números telefónicos de contacto del COMUDE.",
+      "slug": "comude-02a",
+      "activo": true,
+      "orden": 4,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 5,
+    "fields": {
+      "codigo": "03A.",
+      "titulo_corto": "Directorio de empleados",
+      "descripcion": "Directorio de los miembros y personal técnico del COMUDE con sus datos de contacto.",
+      "slug": "comude-03a",
+      "activo": true,
+      "orden": 5,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 6,
+    "fields": {
+      "codigo": "05A.",
+      "titulo_corto": "Misión",
+      "descripcion": "Misión del Consejo Municipal de Desarrollo y su razón de ser dentro del municipio.",
+      "slug": "comude-05a",
+      "activo": true,
+      "orden": 6,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 7,
+    "fields": {
+      "codigo": "05B.",
+      "titulo_corto": "Objetivos",
+      "descripcion": "Objetivos estratégicos y operativos del COMUDE para el desarrollo municipal.",
+      "slug": "comude-05b",
+      "activo": true,
+      "orden": 7,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 8,
+    "fields": {
+      "codigo": "05C.",
+      "titulo_corto": "Plan Operativo Anual",
+      "descripcion": "Plan Operativo Anual (POA) del COMUDE con sus programas, proyectos y actividades.",
+      "slug": "comude-05c",
+      "activo": true,
+      "orden": 8,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 9,
+    "fields": {
+      "codigo": "05D.",
+      "titulo_corto": "Resultados",
+      "descripcion": "Resultados e informes de gestión de las actividades realizadas por el COMUDE.",
+      "slug": "comude-05d",
+      "activo": true,
+      "orden": 9,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 10,
+    "fields": {
+      "codigo": "06A.",
+      "titulo_corto": "Manuales",
+      "descripcion": "Manuales de procedimientos, funciones y operación del Consejo Municipal de Desarrollo.",
+      "slug": "comude-06a",
+      "activo": true,
+      "orden": 10,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 11,
+    "fields": {
+      "codigo": "27A.",
+      "titulo_corto": "Información clasificada",
+      "descripcion": "Índice de información clasificada como reservada o confidencial del COMUDE.",
+      "slug": "comude-27a",
+      "activo": true,
+      "orden": 11,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 12,
+    "fields": {
+      "codigo": "28A.",
+      "titulo_corto": "Pertenencia sociolingüística",
+      "descripcion": "Información sobre la composición sociolingüística y cultural del COMUDE y sus representantes.",
+      "slug": "comude-28a",
+      "activo": true,
+      "orden": 12,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 13,
+    "fields": {
+      "codigo": "29A.",
+      "titulo_corto": "Convocatorias",
+      "descripcion": "Convocatorias a sesiones ordinarias y extraordinarias del Consejo Municipal de Desarrollo.",
+      "slug": "comude-29a",
+      "activo": true,
+      "orden": 13,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "comude.numeralcomude",
+    "pk": 14,
+    "fields": {
+      "codigo": "29B.",
+      "titulo_corto": "Actas",
+      "descripcion": "Actas de las sesiones ordinarias y extraordinarias del Consejo Municipal de Desarrollo.",
+      "slug": "comude-29b",
+      "activo": true,
+      "orden": 14,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  }
+]

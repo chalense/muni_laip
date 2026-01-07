@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}Portal de Transparencia{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute transform rotate-45 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        <div class="absolute right-0 bottom-0 transform translate-x-1/2 translate-y-1/2 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center">
+            <!-- Logo/Escudo -->
+            <div class="mb-8 flex justify-center">
+                <div class="w-32 h-32 bg-white bg-opacity-20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl">
+                    <i class="fa-solid fa-landmark text-6xl text-blue-700"></i>
+                </div>
+            </div>
+            
+            <!-- Título -->
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Portal de Transparencia
+            </h1>
+            <p class="text-2xl md:text-3xl text-blue-100 mb-4">
+                Municipalidad de El Chal, Petén
+            </p>
+            <p class="text-lg text-blue-200 max-w-3xl mx-auto">
+                Sistema integral de acceso a la información pública municipal de acuerdo 
+                con el Decreto 57-2008 del Congreso de la República de Guatemala
+            </p>
+            
+            <!-- Botón de búsqueda rápida -->
+            <div class="mt-12 max-w-2xl mx-auto">
+                <form action="{% url 'transparencia:busqueda' %}" method="get" class="relative">
+                    <input type="text" 
+                           name="q"
+                           placeholder="Buscar documentos, actas, informes..."
+                           class="w-full px-6 py-4 pl-14 rounded-full text-blue-100 text-lg shadow-2xl focus:outline-none focus:ring-4 focus:ring-blue-300">
+                    <i class="fas fa-search absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl"></i>
+                    <button type="submit" 
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition-colors">
+                        Buscar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Módulos del Sistema -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">
+            Módulos de Información Pública
+        </h2>
+        <p class="text-xl text-gray-600">
+            Accede a la información organizada por categorías
+        </p>
+    </div>
+    
+    <!-- Grid de Módulos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for modulo in modulos %}
+        <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden
+                    {% if not modulo.activo %}opacity-60{% endif %}">
+            <!-- Barra de color superior -->
+            <div class="h-2 bg-gradient-to-r 
+                {% if modulo.color == 'blue' %}from-blue-500 to-blue-600
+                {% elif modulo.color == 'green' %}from-green-500 to-green-600
+                {% elif modulo.color == 'yellow' %}from-yellow-500 to-yellow-600
+                {% elif modulo.color == 'purple' %}from-purple-500 to-purple-600
+                {% elif modulo.color == 'red' %}from-red-500 to-red-600
+                {% endif %}"></div>
+            
+            <div class="p-8">
+                <!-- Icono -->
+                <div class="mb-6">
+                    <div class="w-16 h-16 rounded-xl flex items-center justify-center
+                        {% if modulo.color == 'blue' %}bg-blue-100 text-blue-600
+                        {% elif modulo.color == 'green' %}bg-green-100 text-green-600
+                        {% elif modulo.color == 'yellow' %}bg-yellow-100 text-yellow-600
+                        {% elif modulo.color == 'purple' %}bg-purple-100 text-purple-600
+                        {% elif modulo.color == 'red' %}bg-red-100 text-red-600
+                        {% endif %}
+                        group-hover:scale-110 transition-transform">
+                        <i class="fas {{ modulo.icono }} text-3xl"></i>
+                    </div>
+                </div>
+                
+                <!-- Contenido -->
+                <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-{{ modulo.color }}-600 transition-colors">
+                    {{ modulo.nombre }}
+                </h3>
+                
+                <p class="text-gray-600 mb-6 min-h-[3rem]">
+                    {{ modulo.descripcion }}
+                </p>
+                
+                <!-- Estadísticas -->
+                {% if modulo.activo %}
+                <div class="flex items-center justify-between mb-6 pb-6 border-b border-gray-200">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold
+                            {% if modulo.color == 'blue' %}text-blue-600
+                            {% elif modulo.color == 'green' %}text-green-600
+                            {% elif modulo.color == 'yellow' %}text-yellow-600
+                            {% elif modulo.color == 'purple' %}text-purple-600
+                            {% elif modulo.color == 'red' %}text-red-600
+                            {% endif %}">
+                            {{ modulo.numerales }}
+                        </div>
+                        <div class="text-sm text-gray-500">Numerales</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full 
+                            {% if modulo.color == 'blue' %}bg-blue-100
+                            {% elif modulo.color == 'green' %}bg-green-100
+                            {% elif modulo.color == 'yellow' %}bg-yellow-100
+                            {% elif modulo.color == 'purple' %}bg-purple-100
+                            {% elif modulo.color == 'red' %}bg-red-100
+                            {% endif %}
+                            flex items-center justify-center mx-auto">
+                            <i class="fas fa-check-circle text-2xl
+                                {% if modulo.color == 'blue' %}text-blue-600
+                                {% elif modulo.color == 'green' %}text-green-600
+                                {% elif modulo.color == 'yellow' %}text-yellow-600
+                                {% elif modulo.color == 'purple' %}text-purple-600
+                                {% elif modulo.color == 'red' %}text-red-600
+                                {% endif %}"></i>
+                        </div>
+                        <div class="text-sm text-gray-500 mt-2">Activo</div>
+                    </div>
+                </div>
+                
+                <!-- Botón -->
+                <a href="{% if modulo.activo %}{% url modulo.url %}{% else %}#{% endif %}" 
+                   class="block w-full text-center px-6 py-3 rounded-xl font-semibold transition-all
+                   {% if modulo.activo %}
+                       {% if modulo.color == 'blue' %}bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-xl
+                       {% elif modulo.color == 'green' %}bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-xl
+                       {% elif modulo.color == 'yellow' %}bg-yellow-600 hover:bg-yellow-700 text-white shadow-md hover:shadow-xl
+                       {% elif modulo.color == 'purple' %}bg-purple-600 hover:bg-purple-700 text-white shadow-md hover:shadow-xl
+                       {% elif modulo.color == 'red' %}bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-xl
+                       {% endif %}
+                   {% else %}
+                       bg-gray-300 text-gray-600 cursor-not-allowed
+                   {% endif %}">
+                    {% if modulo.activo %}
+                        <i class="fas fa-arrow-right mr-2"></i>Acceder
+                    {% else %}
+                        <i class="fas fa-lock mr-2"></i>Próximamente
+                    {% endif %}
+                </a>
+                {% else %}
+                <div class="text-center py-4">
+                    <span class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm font-semibold">
+                        <i class="fas fa-clock mr-2"></i>
+                        En desarrollo
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Badge de estado -->
+            {% if not modulo.activo %}
+            <div class="absolute top-4 right-4">
+                <span class="inline-flex items-center px-3 py-1 bg-gray-700 bg-opacity-90 text-white text-xs font-semibold rounded-full">
+                    Próximamente
+                </span>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Sección de Información -->
+<div class="bg-gradient-to-r from-gray-50 to-gray-100 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Marco Legal -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                    <i class="fas fa-balance-scale text-2xl text-blue-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Marco Legal</h3>
+                <p class="text-gray-600 mb-4">
+                    Sistema implementado conforme al Decreto 57-2008 - Ley de Acceso a la Información Pública.
+                </p>
+                <a href="#" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                    Ver legislación completa →
+                </a>
+            </div>
+            
+            <!-- Solicitudes -->
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-file-alt text-blue-600 text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900">Solicitudes en Línea</h3>
+                        <p class="text-gray-600">Acceso a la información pública</p>
+                    </div>
+                </div>
+                
+                <p class="text-gray-700 mb-4">
+                    Solicite información pública de acuerdo a la Ley de Acceso a la Información Pública (Decreto 57-2008).
+                </p>
+                
+                <!-- ✅ CONTADOR SIMPLE -->
+                <div class="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Solicitudes recibidas</p>
+                            <p class="text-3xl font-bold text-blue-600">{{ total_solicitudes }}</p>
+                        </div>
+                        <div class="w-16 h-16 bg-blue-200 bg-opacity-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Botones -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="{% url 'solicitudes:solicitud_create' %}" 
+                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        Nueva Solicitud
+                    </a>
+                    <a href="{% url 'solicitudes:solicitud_consulta' %}" 
+                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                        <i class="fas fa-search mr-2"></i>
+                        Consultar Estado
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Ayuda -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                    <i class="fas fa-question-circle text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">¿Necesitas Ayuda?</h3>
+                <p class="text-gray-600 mb-4">
+                    Consulta nuestra guía de uso o contacta con la Unidad de Información Pública.
+                </p>
+                <a href="#" class="text-purple-600 hover:text-purple-800 font-medium text-sm">
+                    Ver guía de uso →
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas Rápidas -->
+{% comment %} <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl shadow-2xl p-12 text-white">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold mb-2">Transparencia en Números</h2>
+            <p class="text-indigo-200">Comprometidos con la información pública</p>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="text-5xl font-bold mb-2">5</div>
+                <div class="text-indigo-200">Módulos</div>
+            </div>
+            <div class="text-center">
+                <div class="text-5xl font-bold mb-2">41</div>
+                <div class="text-indigo-200">Numerales</div>
+            </div>
+            <div class="text-center">
+                <div class="text-5xl font-bold mb-2">100%</div>
+                <div class="text-indigo-200">Digital</div>
+            </div>
+            <div class="text-center">
+                <div class="text-5xl font-bold mb-2">24/7</div>
+                <div class="text-indigo-200">Disponible</div>
+            </div>
+        </div>
+    </div>
+</div> {% endcomment %}
+{% endblock %}

@@ -141,6 +141,10 @@ class Carpeta(models.Model):
         auto_now=True,
         verbose_name="Última Actualización"
     )
+    
+    def __str__(self):
+        ruta = self.get_ruta_completa()
+        return f"[Numeral {self.numeral.codigo}] {ruta}"
 
     class Meta:
         verbose_name = "Carpeta"
@@ -434,7 +438,20 @@ class Documento(models.Model):
             'JPG': 'file-image',
             'JPEG': 'file-image',
             'SVG': 'file-image',
+            'GIF': 'file-image',
+            'BMP': 'file-image',
             'CSV': 'file-csv',
+            'TXT': 'file-alt',
+            'ZIP': 'file-archive',
+            'RAR': 'file-archive',
+            '7Z': 'file-archive',
+            'MP4': 'file-video',
+            'AVI': 'file-video',
+            'MOV': 'file-video',
+            'MP3': 'file-audio',
+            'WAV': 'file-audio',
+            'PPT': 'file-powerpoint',
+            'PPTX': 'file-powerpoint',
         }
         return iconos.get(self.extension, 'file')
     
@@ -444,18 +461,31 @@ class Documento(models.Model):
         Para usar con Tailwind CSS
         """
         colores = {
-            'PDF': 'red',
-            'XLS': 'green',
-            'XLSX': 'green',
-            'DOC': 'blue',
-            'DOCX': 'blue',
-            'PNG': 'purple',
-            'JPG': 'purple',
-            'JPEG': 'purple',
-            'SVG': 'purple',
-            'CSV': 'yellow',
+            'PDF': 'text-red-600',
+            'XLS': 'text-green-600',
+            'XLSX': 'text-green-600',
+            'DOC': 'text-blue-600',
+            'DOCX': 'text-blue-600',
+            'PNG': 'text-purple-600',
+            'JPG': 'text-purple-600',
+            'JPEG': 'text-purple-600',
+            'SVG': 'text-purple-600',
+            'GIF': 'text-purple-600',
+            'BMP': 'text-purple-600',
+            'CSV': 'text-yellow-600',
+            'TXT': 'text-gray-600',
+            'ZIP': 'text-orange-600',
+            'RAR': 'text-orange-600',
+            '7Z': 'text-orange-600',
+            'MP4': 'text-pink-600',
+            'AVI': 'text-pink-600',
+            'MOV': 'text-pink-600',
+            'MP3': 'text-indigo-600',
+            'WAV': 'text-indigo-600',
+            'PPT': 'text-orange-500',
+            'PPTX': 'text-orange-500',
         }
-        return colores.get(self.extension, 'gray')
+        return colores.get(self.extension, 'text-gray-500')
     
     def get_color_tailwind(self):
         """
@@ -483,3 +513,66 @@ class Documento(models.Model):
     def es_pdf(self):
         """Verifica si el documento es un PDF"""
         return self.extension == 'PDF'
+
+
+#Para iconos SVG de los archivos
+# def get_icono_svg(self):
+#     """Retorna el HTML del ícono SVG según la extensión"""
+#     iconos = {
+#         'PDF': '''
+#             <svg viewBox="0 0 24 24" class="w-full h-full">
+#                 <!-- Ícono estilo Adobe PDF -->
+#                 <path fill="#DC1C13" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm0-3.5c-.55 0-1-.45-1-1V8c0-.55.45-1 1-1s1 .45 1 1v4.5c0 .55-.45 1-1 1z"/>
+#                 <text x="12" y="17" text-anchor="middle" fill="white" font-size="6" font-weight="bold" font-family="Arial">PDF</text>
+#             </svg>
+#         ''',
+#         'DOCX': '''
+#             <svg viewBox="0 0 24 24" class="w-full h-full">
+#                 <!-- Ícono estilo Microsoft Word -->
+#                 <rect fill="#2B579A" width="24" height="24" rx="2"/>
+#                 <text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">W</text>
+#             </svg>
+#         ''',
+#         'DOC': '''
+#             <svg viewBox="0 0 24 24" class="w-full h-full">
+#                 <rect fill="#2B579A" width="24" height="24" rx="2"/>
+#                 <text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">W</text>
+#             </svg>
+#         ''',
+#         'XLSX': '''
+#             <svg viewBox="0 0 24 24" class="w-full h-full">
+#                 <!-- Ícono estilo Microsoft Excel -->
+#                 <rect fill="#217346" width="24" height="24" rx="2"/>
+#                 <text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">X</text>
+#             </svg>
+#         ''',
+#         'XLS': '''
+#             <svg viewBox="0 0 24 24" class="w-full h-full">
+#                 <rect fill="#217346" width="24" height="24" rx="2"/>
+#                 <text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">X</text>
+#             </svg>
+#         ''',
+#         'PPTX': '''
+#             <svg viewBox="0 0 24 24" class="w-full h-full">
+#                 <!-- Ícono estilo Microsoft PowerPoint -->
+#                 <rect fill="#D24726" width="24" height="24" rx="2"/>
+#                 <text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">P</text>
+#             </svg>
+#         ''',
+#         'PPT': '''
+#             <svg viewBox="0 0 24 24" class="w-full h-full">
+#                 <rect fill="#D24726" width="24" height="24" rx="2"/>
+#                 <text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">P</text>
+#             </svg>
+#         ''',
+#     }
+    
+#     # Si no hay SVG personalizado, usar Font Awesome
+#     if self.extension in iconos:
+#         return iconos[self.extension]
+#     else:
+#         return f'<i class="fas {self.get_icono_marca()} {self.get_color_icono()} text-2xl"></i>'
+
+# def usar_icono_svg(self):
+#     """Verifica si debe usar SVG o Font Awesome"""
+#     return self.extension in ['PDF', 'DOC', 'DOCX', 'XLS', 'XLSX', 'PPT', 'PPTX']

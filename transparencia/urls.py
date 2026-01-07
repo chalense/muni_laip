@@ -5,7 +5,8 @@ from .views import (
     CarpetaDetailView,
     DocumentoDownloadView,
     BusquedaView,
-    EstadisticasView
+    EstadisticasView,
+    get_carpetas_por_numeral
 )
 
 app_name = 'transparencia'

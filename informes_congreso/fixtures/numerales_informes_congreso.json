@@ -1,0 +1,114 @@
+[
+  {
+    "model": "informes_congreso.numeralinformescongreso",
+    "pk": 1,
+    "fields": {
+      "codigo": "A",
+      "titulo_corto": "Asesorías Contratadas",
+      "descripcion": "Programación y reprogramaciones de asesorías contratadas, detallando nombres, montos y el origen de los recursos para el pago, incluyendo los que provienen de la cooperación reembolsable y no reembolsable.",
+      "slug": "informes-congreso-a",
+      "activo": true,
+      "orden": 1,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "informes_congreso.numeralinformescongreso",
+    "pk": 2,
+    "fields": {
+      "codigo": "B",
+      "titulo_corto": "Jornales",
+      "descripcion": "Programación y reprogramaciones de jornales.",
+      "slug": "informes-congreso-b",
+      "activo": true,
+      "orden": 2,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "informes_congreso.numeralinformescongreso",
+    "pk": 3,
+    "fields": {
+      "codigo": "C",
+      "titulo_corto": "Beneficios Salariales",
+      "descripcion": "Documentos que respalden bonos o beneficios salariales, derivados o no de pactos colectivos de trabajo u otros similares.",
+      "slug": "informes-congreso-c",
+      "activo": true,
+      "orden": 3,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "informes_congreso.numeralinformescongreso",
+    "pk": 4,
+    "fields": {
+      "codigo": "D",
+      "titulo_corto": "Arrendamiento de Edificios",
+      "descripcion": "Programaciones de arrendamiento de edificios.",
+      "slug": "informes-congreso-d",
+      "activo": true,
+      "orden": 4,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "informes_congreso.numeralinformescongreso",
+    "pk": 5,
+    "fields": {
+      "codigo": "E",
+      "titulo_corto": "Convenios con otras Entidades",
+      "descripcion": "Todo tipo de convenios suscritos con Organizaciones No Gubernamentales, Asociaciones legalmente constituidas, Organismos Regionales o Internacionales, así como informes correspondientes de avances físicos y financieros que se deriven de tales convenios.",
+      "slug": "informes-congreso-e",
+      "activo": true,
+      "orden": 5,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "informes_congreso.numeralinformescongreso",
+    "pk": 6,
+    "fields": {
+      "codigo": "F",
+      "titulo_corto": "Aportes al Sector Privado",
+      "descripcion": "Programación y reprogramación de aportes al sector privado y al sector externo, así como los respectivos informes de avance físico y financiero.",
+      "slug": "informes-congreso-f",
+      "activo": true,
+      "orden": 6,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "informes_congreso.numeralinformescongreso",
+    "pk": 7,
+    "fields": {
+      "codigo": "G",
+      "titulo_corto": "Proyectos por Cooperación",
+      "descripcion": "Informes de avance físico y financiero de programas y proyectos financiados con recursos provenientes de la cooperación externa reembolsable y no reembolsable.",
+      "slug": "informes-congreso-g",
+      "activo": true,
+      "orden": 7,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "informes_congreso.numeralinformescongreso",
+    "pk": 8,
+    "fields": {
+      "codigo": "H",
+      "titulo_corto": "Liquidación Presupuestaria",
+      "descripcion": "Informes de liquidación presupuestaria del ejercicio fiscal anterior.",
+      "slug": "informes-congreso-h",
+      "activo": true,
+      "orden": 8,
+      "creado_en": "2024-01-01T00:00:00Z",
+      "actualizado_en": "2024-01-01T00:00:00Z"
+    }
+  }
+]

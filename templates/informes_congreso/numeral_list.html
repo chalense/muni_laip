@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Informes al Congreso - Decreto 101-97{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-b from-purple-600 to-purple-800 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            Informes al Congreso de la República
+        </h1>
+        <p class="text-xl md:text-2xl text-purple-100 mb-6">
+            Decreto 101-97 - Artículo 17 Ter
+        </p>
+        <p class="text-purple-100 max-w-3xl mx-auto">
+            Transparencia en la gestión pública municipal
+        </p>
+        
+        <!-- Estadísticas -->
+        {% comment %} <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12 max-w-3xl mx-auto">
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+                <div class="text-3xl font-bold text-purple-800">{{ total_numerales }}</div>
+                <div class="text-sm text-purple-800">Numerales</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+                <div class="text-3xl font-bold text-purple-800">{{ total_documentos_global }}</div>
+                <div class="text-sm text-purple-800">Documentos</div>
+            </div>
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4 col-span-2 md:col-span-1">
+                <div class="text-3xl font-bold">
+                    <i class="fas fa-sync-alt text-purple-800"></i>
+                </div>
+                <div class="text-sm text-purple-800">Actualización Mensual</div>
+            </div>
+        </div> {% endcomment %}
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Marco Legal -->
+    <div class="mb-12 bg-purple-50 border-l-4 border-purple-600 p-6 rounded-r-lg">
+        <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+                <i class="fas fa-gavel text-purple-600 text-3xl"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">
+                    {{ marco_legal.decreto }} - {{ marco_legal.articulo }}
+                </h2>
+                <p class="text-gray-700 text-sm leading-relaxed">
+                    {{ marco_legal.descripcion }}
+                </p>
+                <div class="mt-4 flex items-center gap-4 text-sm">
+                    <span class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-full font-semibold">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        Actualización cada 30 días
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-full font-semibold">
+                        <i class="fas fa-globe mr-2"></i>
+                        Acceso libre y gratuito
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documentos Destacados -->
+    {% if documentos_destacados %}
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-star text-yellow-500 mr-3"></i>
+            Documentos Destacados
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for doc in documentos_destacados %}
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow p-6 border-l-4 border-yellow-500">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="px-3 py-1 text-xs font-semibold rounded-full 
+                                 {% if doc.extension == 'PDF' %}bg-red-100 text-red-800
+                                 {% elif doc.extension == 'XLSX' or doc.extension == 'XLS' %}bg-green-100 text-green-800
+                                 {% elif doc.extension == 'DOCX' or doc.extension == 'DOC' %}bg-blue-100 text-blue-800
+                                 {% else %}bg-gray-100 text-gray-800{% endif %}">
+                        {{ doc.extension }}
+                    </span>
+                    <i class="fas fa-star text-yellow-500"></i>
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2">
+                    {{ doc.titulo }}
+                </h3>
+                <p class="text-sm text-gray-600 mb-3">
+                    <i class="fas fa-folder mr-1"></i>
+                    Numeral {{ doc.numeral.codigo }}
+                </p>
+                <a href="{% url 'informes_congreso:documento_download' doc.pk %}" 
+                   class="inline-flex items-center text-purple-600 hover:text-purple-800 font-medium text-sm">
+                    <i class="fas fa-download mr-2"></i>
+                    Descargar ({{ doc.tamanio_legible }})
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Lista de Numerales -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-list text-purple-600 mr-3"></i>
+            Numerales de Información
+        </h2>
+        
+        <div class="space-y-4">
+            {% for numeral in numerales %}
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 fade-in">
+                <a href="{% url 'informes_congreso:numeral_detail' numeral.slug %}" 
+                   class="block p-6 group">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <!-- Badge con letra -->
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-600 text-white font-bold text-lg group-hover:scale-110 transition-transform">
+                                    {{ numeral.codigo }}
+                                </span>
+                                <h3 class="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
+                                    {{ numeral.titulo_corto }}
+                                </h3>
+                            </div>
+                            
+                            <!-- Descripción -->
+                            <p class="text-gray-600 ml-15 mb-4 line-clamp-2">
+                                {{ numeral.descripcion }}
+                            </p>
+                            
+                            <!-- Estadísticas -->
+                            <div class="flex items-center gap-4 ml-15 flex-wrap">
+                                {% if numeral.total_documentos > 0 %}
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                    <i class="fas fa-file-alt mr-2"></i>
+                                    {{ numeral.total_documentos }} documento{{ numeral.total_documentos|pluralize }}
+                                </span>
+                                {% endif %}
+                                
+                                {% if numeral.total_carpetas > 0 %}
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                                    <i class="fas fa-folder mr-2"></i>
+                                    {{ numeral.total_carpetas }} año{{ numeral.total_carpetas|pluralize }}
+                                </span>
+                                {% endif %}
+                                
+                                {% if numeral.total_documentos == 0 and numeral.total_carpetas == 0 %}
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    Sin documentos publicados
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Flecha -->
+                        <div class="ml-4">
+                            <i class="fas fa-chevron-right text-gray-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Información adicional -->
+    <div class="mt-12 bg-purple-50 border border-purple-200 rounded-lg p-6">
+        <div class="flex items-start">
+            <div class="flex-shrink-0">
+                <i class="fas fa-info-circle text-purple-600 text-2xl"></i>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                    Sobre los Informes al Congreso
+                </h3>
+                <p class="text-gray-700 mb-2">
+                    De conformidad con el Decreto 101-97, Artículo 17 Ter, la
+                    municipalidad debe actualizar esta información cada 30 días y
+                    presentarla tanto en formato digital como por escrito a las comisiones
+                    correspondientes del Congreso de la República.
+                </p>
+                <p class="text-gray-700">
+                    Los 8 numerales alfabéticos (A-H) contienen información específica
+                    sobre diferentes aspectos de la gestión municipal que requieren
+                    rendición de cuentas periódica.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
