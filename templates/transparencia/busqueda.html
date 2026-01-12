@@ -4,7 +4,7 @@
 
 {% block content %}
 <!-- Header de Búsqueda -->
-<div class="bg-gradient-to-r from-purple-600 to-purple-800 text-white py-12">
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl md:text-4xl font-bold mb-6 text-center">
             <i class="fas fa-search mr-3"></i>
@@ -25,7 +25,7 @@
                                id="search"
                                value="{{ query }}"
                                placeholder="Buscar por título, descripción o numeral..."
-                               class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900">
+                               class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:blue-500 focus:border-transparent text-gray-900">
                         <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         </label>
                         <select name="numeral" 
                                 id="numeral"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:blue-500 focus:border-transparent text-gray-900">
                             <option value="">Todos los numerales</option>
                             {% for numeral in numerales %}
                                 <option value="{{ numeral.codigo }}" 
@@ -57,7 +57,7 @@
                         </label>
                         <select name="tipo" 
                                 id="tipo"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:blue-500 focus:border-transparent text-gray-900">
                             <option value="">Todos los tipos</option>
                             {% for tipo in tipos_archivo %}
                                 <option value="{{ tipo }}" 
@@ -72,7 +72,7 @@
                 <!-- Botones -->
                 <div class="flex gap-3">
                     <button type="submit" 
-                            class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition-colors shadow-md">
+                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors shadow-md">
                         <i class="fas fa-search mr-2"></i>
                         Buscar
                     </button>
@@ -94,7 +94,7 @@
             <div class="flex items-center justify-between">
                 <h2 class="text-2xl font-bold text-gray-900">
                     Resultados de Búsqueda
-                    <span class="text-purple-600">({{ total_resultados }})</span>
+                    <span class="text-blue-600">({{ total_resultados }})</span>
                 </h2>
                 
                 {% if query %}
@@ -207,7 +207,7 @@
                             <!-- Botón Descargar -->
                             <div class="flex-shrink-0">
                                 <a href="{% url 'transparencia:documento_download' doc.pk %}" 
-                                   class="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors shadow-md">
+                                   class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md">
                                     <i class="fas fa-download mr-2"></i>
                                     Descargar
                                 </a>
@@ -228,7 +228,7 @@
                             </a>
                         {% endif %}
                         
-                        <span class="px-6 py-2 bg-purple-600 text-white border border-purple-600">
+                        <span class="px-6 py-2 bg-blue-600 text-white border border-blue-600">
                             Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
                         </span>
                         
@@ -252,7 +252,7 @@
                     Intenta con otros términos de búsqueda o ajusta los filtros.
                 </p>
                 <a href="{% url 'transparencia:busqueda' %}" 
-                   class="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors">
+                   class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
                     <i class="fas fa-redo mr-2"></i>
                     Nueva búsqueda
                 </a>
@@ -261,7 +261,7 @@
     {% else %}
         <!-- Estado Inicial (Sin búsqueda) -->
         <div class="bg-white rounded-lg shadow-md p-12 text-center">
-            <i class="fas fa-search text-6xl text-purple-300 mb-4"></i>
+            <i class="fas fa-search text-6xl text-blue-300 mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-900 mb-2">
                 Busca documentos en todo el sistema
             </h3>

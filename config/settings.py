@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "informes_congreso",
     "sinacig",
     "solicitudes",
+    
+    #Tailwind CSS
     "tailwind",
     "theme",
 ]
@@ -116,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "es-gt"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Guatemala"
 
 USE_I18N = True
 
@@ -156,5 +158,5 @@ EMAIL_HOST = 'mail.munielchalpeten.gob.gt'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'infopublica@munielchalpeten.gob.gt'
-EMAIL_HOST_PASSWORD = 'InfoPublica2017()'
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", defult="")
 DEFAULT_FROM_EMAIL = 'noreply@munielchalpeten.gob.gt'

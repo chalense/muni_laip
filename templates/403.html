@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Acceso Prohibido - 403{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+    <div class="max-w-2xl w-full">
+        <!-- Icono de error -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-orange-100 rounded-full mb-4">
+                <i class="fas fa-lock text-orange-600 text-5xl"></i>
+            </div>
+            <h1 class="text-6xl font-bold text-gray-900 mb-2">403</h1>
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">
+                Acceso Prohibido
+            </h2>
+            <p class="text-lg text-gray-600">
+                No tienes permiso para acceder a esta página.
+            </p>
+        </div>
+        
+        <!-- Información adicional -->
+        <div class="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-8">
+            <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
+                <i class="fas fa-info-circle text-orange-600 mr-2"></i>
+                Posibles Razones
+            </h3>
+            <ul class="space-y-2 text-sm text-gray-700">
+                <li class="flex items-start">
+                    <i class="fas fa-circle text-orange-400 mr-2 mt-1 text-xs"></i>
+                    <span>No ha iniciado sesión en el sistema</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-circle text-orange-400 mr-2 mt-1 text-xs"></i>
+                    <span>No tiene los permisos necesarios para ver este contenido</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-circle text-orange-400 mr-2 mt-1 text-xs"></i>
+                    <span>Esta página está restringida solo para administradores</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-circle text-orange-400 mr-2 mt-1 text-xs"></i>
+                    <span>La sesión ha expirado</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Botones de acción -->
+        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+            <a href="{% url 'home:index' %}"
+               class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                <i class="fas fa-home mr-2"></i>
+                Ir al Inicio
+            </a>
+            <a href="{% url 'admin:index' %}" 
+               class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                Iniciar Sesión
+            </a>
+        </div>
+        
+        <!-- Información de contacto -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                <i class="fas fa-user-shield text-orange-600 mr-2"></i>
+                ¿Necesitas Acceso?
+            </h3>
+            <p class="text-sm text-gray-700 mb-4">
+                Si cree que debería tener acceso a esta página, por favor contacte al administrador del sistema.
+            </p>
+            <div class="space-y-2 text-sm text-gray-700">
+                <p class="flex items-center">
+                    <i class="fas fa-envelope text-orange-600 mr-3 w-5"></i>
+                    <a href="mailto:admin@munielchalpeten.gob.gt" class="text-blue-600 hover:underline">
+                        admin@munielchalpeten.gob.gt
+                    </a>
+                </p>
+                <p class="flex items-center">
+                    <i class="fas fa-clock text-orange-600 mr-3 w-5"></i>
+                    <span>Lunes a Viernes: 8:00 - 16:00 hrs</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

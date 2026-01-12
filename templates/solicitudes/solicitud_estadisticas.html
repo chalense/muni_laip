@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+{% block title %}Estadísticas de Solicitudes{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            <i class="fas fa-chart-bar mr-3"></i>
+            Estadísticas de Solicitudes
+        </h1>
+        <p class="text-xl text-indigo-100">
+            Sistema de Información Pública
+        </p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Estadísticas Generales -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Resumen General</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <!-- Total -->
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white text-center">
+                <div class="text-4xl font-bold mb-1">{{ estadisticas.total }}</div>
+                <div class="text-blue-100 text-sm">Total</div>
+            </div>
+            
+            <!-- Pendientes -->
+            <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-lg p-6 text-white text-center">
+                <div class="text-4xl font-bold mb-1">{{ estadisticas.pendientes }}</div>
+                <div class="text-orange-100 text-sm">Pendientes</div>
+            </div>
+            
+            <!-- En Proceso -->
+            <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg shadow-lg p-6 text-white text-center">
+                <div class="text-4xl font-bold mb-1">{{ estadisticas.en_proceso }}</div>
+                <div class="text-blue-100 text-sm">En Proceso</div>
+            </div>
+            
+            <!-- Respondidas -->
+            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white text-center">
+                <div class="text-4xl font-bold mb-1">{{ estadisticas.respondidas }}</div>
+                <div class="text-green-100 text-sm">Respondidas</div>
+            </div>
+            
+            <!-- Rechazadas -->
+            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-lg p-6 text-white text-center">
+                <div class="text-4xl font-bold mb-1">{{ estadisticas.rechazadas }}</div>
+                <div class="text-red-100 text-sm">Rechazadas</div>
+            </div>
+            
+            <!-- Vencidas -->
+            <div class="bg-gradient-to-br from-gray-600 to-gray-700 rounded-lg shadow-lg p-6 text-white text-center">
+                <div class="text-4xl font-bold mb-1">{{ estadisticas.vencidas }}</div>
+                <div class="text-gray-100 text-sm">Vencidas</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Solicitudes Recientes (Públicas - Solo Número y Fecha) -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            <i class="fas fa-clock text-blue-600 mr-2"></i>
+            Solicitudes Recientes
+        </h2>
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Número de Seguimiento
+                            </th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Estado
+                            </th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Fecha
+                            </th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Días
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for solicitud in solicitudes_recientes %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="{% url 'solicitudes:solicitud_consulta' %}?numero={{ solicitud.numero_seguimiento }}"
+                                   class="font-mono text-blue-600 hover:text-blue-800 font-semibold">
+                                    {{ solicitud.numero_seguimiento }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                {% if solicitud.estado == 'pendiente' %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">
+                                    Pendiente
+                                </span>
+                                {% elif solicitud.estado == 'en_proceso' %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                                    En Proceso
+                                </span>
+                                {% elif solicitud.estado == 'respondida' %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                    Respondida
+                                </span>
+                                {% elif solicitud.estado == 'rechazada' %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                                    Rechazada
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                                {{ solicitud.fecha_solicitud|date:"d/m/Y" }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                {% if solicitud.esta_vencida %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                                    {{ solicitud.dias_desde_solicitud }} días ⚠️
+                                </span>
+                                {% else %}
+                                <span class="text-sm text-gray-900">
+                                    {{ solicitud.dias_desde_solicitud }} días
+                                </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                                <i class="fas fa-inbox text-4xl mb-2 block text-gray-300"></i>
+                                No hay solicitudes registradas
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráfico de Progreso -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            <i class="fas fa-chart-pie text-indigo-600 mr-2"></i>
+            Distribución de Estados
+        </h2>
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Barra de progreso visual -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Porcentajes</h3>
+                    {% if estadisticas.total > 0 %}
+                    <div class="space-y-4">
+                        <!-- Pendientes -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Pendientes</span>
+                                <span class="text-sm font-semibold text-orange-600">
+                                    {% widthratio estadisticas.pendientes estadisticas.total 100 %}%
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                {% widthratio estadisticas.pendientes estadisticas.total 100 as percentage %}
+                                <div class="bg-orange-500 h-3 rounded-full" style="width: {{ percentage }}%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- En Proceso -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">En Proceso</span>
+                                <span class="text-sm font-semibold text-blue-600">
+                                    {% widthratio estadisticas.en_proceso estadisticas.total 100 %}%
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                {% widthratio estadisticas.en_proceso estadisticas.total 100 as percentage %}
+                                <div class="bg-blue-600 h-3 rounded-full" style="width: {{ percentage }}%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Respondidas -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Respondidas</span>
+                                <span class="text-sm font-semibold text-green-600">
+                                    {% widthratio estadisticas.respondidas estadisticas.total 100 %}%
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                {% widthratio estadisticas.respondidas estadisticas.total 100 as percentage %}
+                                <div class="bg-green-600 h-3 rounded-full" style="width: {{ percentage }}%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rechazadas -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Rechazadas</span>
+                                <span class="text-sm font-semibold text-red-600">
+                                    {% widthratio estadisticas.rechazadas estadisticas.total 100 %}%
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                {% widthratio estadisticas.rechazadas estadisticas.total 100 as percentage %}
+                                <div class="bg-red-600 h-3 rounded-full" style="width: {{ percentage }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-gray-500">No hay datos para mostrar</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Resumen numérico -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Resumen</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm text-gray-700">Total de solicitudes</span>
+                            <span class="text-lg font-bold text-blue-600">{{ estadisticas.total }}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm text-gray-700">En trámite</span>
+                            <span class="text-lg font-bold text-orange-600">
+                                {{ estadisticas.pendientes|add:estadisticas.en_proceso }}
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm text-gray-700">Finalizadas</span>
+                            <span class="text-lg font-bold text-green-600">
+                                {{ estadisticas.respondidas|add:estadisticas.rechazadas }}
+                            </span>
+                        </div>
+                        {% if estadisticas.vencidas > 0 %}
+                        <div class="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
+                            <span class="text-sm text-red-700 font-semibold">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                Vencidas
+                            </span>
+                            <span class="text-lg font-bold text-red-600">{{ estadisticas.vencidas }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Información Adicional -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-8">
+        <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+                <i class="fas fa-info-circle text-blue-600 text-3xl"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                    Acerca de estas Estadísticas
+                </h3>
+                <p class="text-gray-700 mb-2">
+                    Estas estadísticas muestran el nivel de atención y respuesta a las solicitudes 
+                    de información pública presentadas por la ciudadanía.
+                </p>
+                <p class="text-gray-700">
+                    De acuerdo con la Ley de Acceso a la Información Pública (Decreto 57-2008), 
+                    las solicitudes deben ser respondidas en un plazo máximo de 10 días hábiles.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Enlaces útiles -->
+    <div class="mt-8 text-center">
+        <a href="{% url 'solicitudes:solicitud_create' %}" 
+           class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg mr-4">
+            <i class="fas fa-plus-circle mr-2"></i>
+            Nueva Solicitud
+        </a>
+        <a href="{% url 'solicitudes:solicitud_consulta' %}" 
+           class="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+            <i class="fas fa-search mr-2"></i>
+            Consultar Estado
+        </a>
+    </div>
+</div>
+{% endblock %}

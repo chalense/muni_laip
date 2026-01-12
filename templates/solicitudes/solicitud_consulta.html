@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultar Solicitud{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            <i class="fas fa-search mr-3"></i>
+            Consultar estado de solicitud
+        </h1>
+        <p class="text-xl text-blue-100">
+            Ingrese su número de seguimiento
+        </p>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Formulario de Consulta -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <form method="get" action="{% url 'solicitudes:solicitud_consulta' %}" class="space-y-6">
+            <div>
+                <label for="numero" class="block text-sm font-medium text-gray-700 mb-2">
+                    Número de Seguimiento
+                </label>
+                <div class="relative">
+                    <input type="text" 
+                           name="numero" 
+                           id="numero" 
+                           value="{{ numero_busqueda }}"
+                           placeholder="Ej: SI-20241230-ABC123"
+                           class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           required>
+                    <i class="fas fa-hashtag absolute left-4 top-4 text-gray-400"></i>
+                </div>
+                <p class="mt-2 text-sm text-gray-500">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    El número de seguimiento fue enviado a su correo electrónico al crear la solicitud
+                </p>
+            </div>
+            
+            <button type="submit" 
+                    class="w-full inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg">
+                <i class="fas fa-search mr-2"></i>
+                Consultar
+            </button>
+        </form>
+    </div>
+    
+    <!-- Resultados -->
+    {% if solicitud %}
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Header del resultado -->
+        <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-check-circle text-white text-2xl"></i>
+                <h2 class="text-xl font-bold text-white">Solicitud Encontrada</h2>
+            </div>
+        </div>
+        
+        <!-- Contenido -->
+        <div class="p-6 space-y-6">
+            <!-- Número de Seguimiento -->
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                <p class="text-sm text-gray-600 mb-1">Número de Seguimiento:</p>
+                <p class="text-2xl font-bold text-blue-600">{{ solicitud.numero_seguimiento }}</p>
+            </div>
+            
+            <!-- Estado -->
+            <div>
+                <h3 class="text-sm font-medium text-gray-700 mb-2">Estado Actual:</h3>
+                <div class="flex items-center gap-3">
+                    {% if solicitud.estado == 'pendiente' %}
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-orange-100 text-orange-800">
+                        <i class="fas fa-clock mr-2"></i>
+                        Pendiente
+                    </span>
+                    {% elif solicitud.estado == 'en_proceso' %}
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-blue-100 text-blue-800">
+                        <i class="fas fa-spinner mr-2"></i>
+                        En Proceso
+                    </span>
+                    {% elif solicitud.estado == 'respondida' %}
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-green-100 text-green-800">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Respondida
+                    </span>
+                    {% elif solicitud.estado == 'rechazada' %}
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800">
+                        <i class="fas fa-times-circle mr-2"></i>
+                        Rechazada
+                    </span>
+                    {% endif %}
+                    
+                    {% if solicitud.esta_vencida %}
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                        Vencida (más de 10 días)
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Información de la Solicitud -->
+            <div class="border-t pt-4">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Información de la Solicitud</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-500">Solicitante</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.nombre_completo }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Fecha de solicitud</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.fecha_solicitud|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Correo electrónico</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.correo_electronico }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Medio de entrega</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.get_medio_entrega_display }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Días transcurridos</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.dias_desde_solicitud }} días</p>
+                    </div>
+                    {% if solicitud.fecha_respuesta %}
+                    <div>
+                        <p class="text-sm text-gray-500">Fecha de respuesta</p>
+                        <p class="font-semibold text-gray-900">{{ solicitud.fecha_respuesta|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Solicitud -->
+            <div class="border-t pt-4">
+                <h3 class="text-sm font-medium text-gray-700 mb-2">Información solicitada:</h3>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <p class="text-gray-700 whitespace-pre-wrap">{{ solicitud.solicitud }}</p>
+                </div>
+            </div>
+            
+            <!-- Respuesta (si existe) -->
+            {% if solicitud.respuesta %}
+            <div class="border-t pt-4">
+                <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
+                    <i class="fas fa-reply text-green-600 mr-2"></i>
+                    Respuesta
+                </h3>
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <p class="text-gray-700 whitespace-pre-wrap">{{ solicitud.respuesta }}</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Información del Plazo -->
+            {% if solicitud.estado == 'pendiente' or solicitud.estado == 'en_proceso' %}
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-info-circle text-yellow-600 text-xl mt-1"></i>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-1">Plazo Legal</h4>
+                        <p class="text-sm text-gray-700">
+                            Según la Ley de Acceso a la Información Pública (Decreto 57-2008), 
+                            su solicitud debe ser respondida en un plazo máximo de <strong>10 días hábiles</strong>.
+                        </p>
+                        {% if solicitud.esta_vencida %}
+                        <p class="text-sm text-red-700 font-semibold mt-2">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>
+                            Esta solicitud ha superado el plazo legal.
+                        </p>
+                        {% else %}
+                        <p class="text-sm text-green-700 font-semibold mt-2">
+                            <i class="fas fa-check mr-1"></i>
+                            Aún dentro del plazo legal.
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% elif numero_busqueda %}
+    <!-- No encontrada -->
+    <div class="bg-white rounded-lg shadow-lg p-12 text-center">
+        <i class="fas fa-exclamation-circle text-6xl text-red-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            Solicitud No Encontrada
+        </h3>
+        <p class="text-gray-600 mb-6">
+            No se encontró ninguna solicitud con el número: <strong>{{ numero_busqueda }}</strong>
+        </p>
+        <div class="text-sm text-gray-600 text-left max-w-md mx-auto mb-6">
+            <p class="mb-2">Verifique que:</p>
+            <ul class="list-disc list-inside space-y-1">
+                <li>El número de seguimiento esté escrito correctamente</li>
+                <li>Incluya todos los caracteres (incluyendo guiones)</li>
+                <li>El formato sea: SI-AÑOMESDIA-CÓDIGO</li>
+            </ul>
+        </div>
+        <button onclick="document.getElementById('numero').focus()" 
+                class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+            <i class="fas fa-redo mr-2"></i>
+            Intentar de Nuevo
+        </button>
+    </div>
+    {% endif %}
+    
+    <!-- Información Adicional -->
+    <div class="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <h3 class="font-bold text-gray-900 mb-3 flex items-center">
+            <i class="fas fa-question-circle text-blue-600 mr-2"></i>
+            ¿Necesita Ayuda?
+        </h3>
+        <div class="space-y-2 text-sm text-gray-700">
+            <p><strong>Correo:</strong> infopublica@munielchalpeten.gob.gt</p>
+            <p><strong>Horario de atención:</strong> Lunes a viernes de 8:00 a 16:00 horas</p>
+            <p class="pt-2">
+                <a href="{% url 'solicitudes:solicitud_create' %}" class="text-blue-600 hover:text-blue-800 hover:underline">
+                    <i class="fas fa-plus-circle mr-1"></i>
+                    Crear una nueva solicitud
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -276,44 +276,24 @@ class BusquedaView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        numeral = self.object
         
-        # # Parámetros de búsqueda
-        # context['query'] = self.request.GET.get('q', '')
-        # context['numeral_filter'] = self.request.GET.get('numeral', '')
-        # context['tipo_filter'] = self.request.GET.get('tipo', '')
+        # Parámetros de búsqueda
+        context['query'] = self.request.GET.get('q', '')
+        context['numeral_filter'] = self.request.GET.get('numeral', '')
+        context['tipo_filter'] = self.request.GET.get('tipo', '')
         
-        # # Numerales para el filtro
-        # context['numerales'] = Numeral.objects.filter(activo=True).order_by('codigo')
+        # Numerales para el filtro
+        context['numerales'] = Numeral.objects.filter(activo=True).order_by('codigo')
         
-        # # Tipos de archivo disponibles
-        # context['tipos_archivo'] = Documento.objects.filter(
-        #     publicado=True
-        # ).values_list('extension', flat=True).distinct().order_by('extension')
+        # Tipos de archivo disponibles
+        context['tipos_archivo'] = Documento.objects.filter(
+            publicado=True
+        ).values_list('extension', flat=True).distinct().order_by('extension')
         
-        # # Total de resultados
-        # context['total_resultados'] = self.get_queryset().count()
+        # Total de resultados
+        context['total_resultados'] = self.get_queryset().count()
         
-        # return context
-        
-        carpeta_raiz = Carpeta.objects.filter(
-            numeral=numeral, padre__isnull=True
-        ).annotate(
-            total_docs=Count('documentos', filter=Q(documentos__publicado=True))
-        ).order_by('-orden', '-nombre').prefetch_related(
-            Prefetch('documentos',
-                queryset=Documento.objects.filter(
-                    publicado=True).order_by('-destacado', '-fecha_publicacion')
-        ))
-        
-        estructura = []
-        for carpeta in carpeta_raiz:
-            estructura.append({
-                'carpeta': carpeta,
-                'subcarpetas': self._construir_arbol(carpeta_raiz)
-            })
-        
-        context['estructura_carpetas'] = estructura
+        return context
 
 
 class EstadisticasView(ListView):
